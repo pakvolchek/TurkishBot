@@ -143,7 +143,7 @@ async def summarize(history: list[dict]) -> str:
             {"role": "system", "content": "Сжато резюмируй текст до ключевых моментов."},
             {"role": "user",   "content": f"Сократи до {MAX_SUMMARY_LEN} слов:\n{text}"}
         ],
-        temperature=0.7,
+        temperature=0.3,
         max_tokens=MAX_SUMMARY_LEN
     )
     return resp.choices[0].message.content.strip()
