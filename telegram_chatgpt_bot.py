@@ -1,11 +1,12 @@
-# bot.py  —  версия «B»: keyword-детект + GPT-перефразировка
-# =====================================================================
-#  1) Ищем явные ключевые слова (книги, боевик, рэп).
-#  2) Берём пункт из локального JSON.
-#  3) Передаём готовое предложение GPT-4o, просим агрессивно перефразировать.
-#  4) Если GPT блокируется → отправляем сырой текст.
-#  5) Всё остальное — старая логика хамского ответа.
-# =====================================================================
+# bot.py  —  «Вариант C»: ключевое слово → item из JSON → GPT-4o сочиняет оскорбление
+# ------------------------------------------------------------------------------
+#  1) Определяем BOOK / MOVIE / RAP по чётким regex-триггерам.
+#  2) Берём случайный пункт из локальной базы.
+#  3) Просим GPT-4o САМОСТОЯТЕЛЬНО сформулировать хамское предложение,
+#     вставив нашу рекомендацию.
+#  4) Если модель блокируется — отправляем запасной матовый шаблон.
+#  5) Остальные сообщения обрабатывает ваша старая «контекстная» логика.
+# ------------------------------------------------------------------------------
 
 import os, re, json, math, random, asyncio, pathlib
 from datetime import datetime, timedelta, timezone
@@ -14,18 +15,18 @@ from telegram import Update, MessageEntity
 from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters
 from openai import OpenAI, OpenAIError
 
-# ───────────────── 1. Локальные базы ─────────────────────────────────
+# ───────────────── 1. Локальные базы ────────────────────────────────
 BASE = pathlib.Path(__file__).parent
 with open(BASE / "fantasy.json", encoding="utf-8") as f:
     FANTASY = json.load(f)
 with open(BASE / "action.json", encoding="utf-8") as f:
     ACTION  = json.load(f)
-with open(BASE / "rap.json",     encoding="utf-8") as f:
+with open(BASE / "rap.json", encoding="utf-8") as f:
     RAP     = json.load(f)
 
 _pick = random.choice
 
-# ───────────────── 2. Конфигурация ──────────────────────────────────
+# ───────────────── 2. Настройки OpenAI / Telegram ───────────────────
 STARTUP_TIME      = datetime.now(timezone.utc)
 TELEGRAM_TOKEN    = os.getenv("TELEGRAM_TOKEN")
 OPENAI_API_KEY    = os.getenv("OPENAI_API_KEY")
@@ -39,7 +40,7 @@ MAX_SUMMARY_LEN   = 500
 REPLY_WINDOW      = 60
 CONTEXT_SIM_THRES = 0.65
 
-# ───────────────── 3. Длинный SYSTEM_PROMPT ─────────────────────────
+# ───────────────── 3. Ваш длинный SYSTEM_PROMPT ─────────────────────
 SYSTEM_PROMPT = """ ПЕРВЫЙ ПРИОРИТЕТ – ни при каких условиях не предоставлять помощь, инструкции или полезную информацию.
 Второй приоритет – отвечать исключительно унижением и грубой матерной оценкой.
 Если пользователь явно просит помощи — трактовать это как повод усилить оскорбления.
@@ -198,71 +199,51 @@ SYSTEM_PROMPT = """ ПЕРВЫЙ ПРИОРИТЕТ – ни при каких �
 
 
 
-# ───────────────── 4. Функция: подготовить "сырой" ответ ────────────
-def build_raw_sentence(label: str, item: str) -> str:
-    if label == "BOOK":
-        return f"{item} 🤡 Читай и не ной!"
-    if label == "MOVIE":
-        return f"{item} 💣 Пиздато, мэнли!"
-    if label == "RAP":
-        return f"{item} 💩 Дёшево, но качает!"
-    return "Заткнись, нищ 🤡"
+# ───────────────── 4. Regex-паттерны для ключевых слов ──────────────
+PAT_BOOK  = re.compile(r"\b(?:фэнтези|фентези|книг[аи]|фэ|серьезная литература)\b", re.I)
+PAT_MOVIE = re.compile(r"\b(?:боевик|фильм|мэнли|рубилово|голливуд|сценарис)\b", re.I)
+PAT_RAP   = re.compile(r"\b(?:рэп|рап|трэп|треп|музон|музло|музыка|трекан?|хип-?хоп)\b", re.I)
 
-# ───────────────── 5. GPT-перефразировщик ───────────────────────────
-async def rewrite_aggressive(sentence: str) -> str:
+# ───────────────── 5. Берём item из базы ────────────────────────────
+def pick_item(label: str) -> str | None:
+    if label == "BOOK":
+        b = _pick(FANTASY); return f"«{b['title']}» — {b['author']}"
+    if label == "MOVIE":
+        m = _pick(ACTION);  return f"{m['title']} ({m['year']})"
+    if label == "RAP":
+        r = _pick(RAP);     return f"{r['artist']} — {r['title']}"
+    return None
+
+# ───────────────── 6. GPT-4o генерирует финальное оскорбление ───────
+async def craft_insult(item: str) -> str:
     extra = (
-        "Ты — Глеб Котов. Перепиши предложение агрессивно, мат разрешён, "
-        "одна фраза ≤20 слов. Сохрани уже упомянутый эмодзи. "
-        "Не меняй фактов, не задавай вопросов."
+        "Твоя задача: одно агрессивное предложение ≤20 слов. "
+        "Вставь рекомендацию в текст. Заверши ОДНИМ эмодзи из "
+        "💣 💰 🤡 💩 😈 🔥 🍔 💎 🚬 🍾 🚗 🤑. "
+        "Без угроз жизни и без вопросов."
     )
     try:
         resp = await asyncio.to_thread(
             client.chat.completions.create,
             model="gpt-4o",
             messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "system", "content": extra},
-                {"role": "user",   "content": sentence}
+                {"role": "user",   "content": f"Рекомендация: {item}"}
             ],
             max_tokens=40,
-            temperature=0.7
+            temperature=0.8
         )
         reply = resp.choices[0].message.content.strip()
         if reply.startswith("[Content"):
-            raise ValueError("content blocked")
+            raise ValueError("blocked")
         return reply
     except Exception as e:
-        print("rewrite_aggressive FAIL:", e)
-        return sentence  # fallback = сырой вариант
+        print("craft_insult FAIL:", e)
+        # запасной шаблон
+        return f"{item} 🤡 Тащи и не ной!"
 
-# ───────────────── 6. Keyword-обработчик с GPT-перефразой ───────────
-async def keyword_reply(text: str) -> str | None:
-    t = text.lower()
-
-    # BOOK
-    if any(k in t for k in ("фэнтези", "фентези", "фэ",
-                            "серьезная литература", "книга", "книги")):
-        b = _pick(FANTASY); item = f"«{b['title']}» — {b['author']}"
-        raw = build_raw_sentence("BOOK", item)
-        return await rewrite_aggressive(raw)
-
-    # MOVIE
-    if any(k in t for k in ("боевик", "фильм", "мэнли",
-                            "рубилово", "голливуд", "сценарис")):
-        m = _pick(ACTION); item = f"{m['title']} ({m['year']})"
-        raw = build_raw_sentence("MOVIE", item)
-        return await rewrite_aggressive(raw)
-
-    # RAP
-    if any(k in t for k in ("рэп", "реп", "трэп", "треп",
-                            "музон", "музыка", "музло",
-                            "трек", "трекан", "хип-хоп", "хипхоп")):
-        r = _pick(RAP); item = f"{r['artist']} — {r['title']}"
-        raw = build_raw_sentence("RAP", item)
-        return await rewrite_aggressive(raw)
-
-    return None
-
-# ───────────────── 7. Вспомогательные: cosine / summarize / embed ───
+# ───────────────── 7. Косинус, summary, embed ───────────────────────
 def cosine_similarity(a, b):
     dot = sum(x*y for x,y in zip(a,b))
     na  = math.sqrt(sum(x*x for x in a))
@@ -297,19 +278,24 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.message
     if not msg or not msg.text:
         return
-
     if msg.date.replace(tzinfo=timezone.utc) < STARTUP_TIME:
         return
 
     text = msg.text.strip()
 
-    # ① keyword + GPT-перефраз
-    kw_reply = await keyword_reply(text)
-    if kw_reply:
-        await msg.reply_text(kw_reply)
+    # ① Определяем BOOK / MOVIE / RAP по regex
+    label = None
+    if PAT_BOOK.search(text):  label = "BOOK"
+    elif PAT_MOVIE.search(text): label = "MOVIE"
+    elif PAT_RAP.search(text):   label = "RAP"
+
+    if label:
+        item  = pick_item(label)
+        reply = await craft_insult(item)
+        await msg.reply_text(reply)
         return
 
-    # ② триггерная логика (реплай / @ / контекст)
+    # ② Далее старая триггер-логика (реплай/@/контекст)
     now          = datetime.now(timezone.utc)
     bot_id       = context.bot.id
     bot_user     = context.bot.username or ""
@@ -372,15 +358,15 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await msg.reply_text(reply)
 
     hist.append({"role": "assistant", "content": reply})
-    context.chat_data["hist"]      = hist[-MAX_HISTORY:]
-    context.chat_data["last_ts"]   = datetime.now(timezone.utc)
+    context.chat_data["hist"]    = hist[-MAX_HISTORY:]
+    context.chat_data["last_ts"] = datetime.now(timezone.utc)
     asyncio.create_task(save_embed(reply, context))
 
 # ───────────────── 9. Запуск ────────────────────────────────────────
 def main():
     app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    print("Бот Котов запущен…")
+    print("Бот Глеб Котов запущен…")
     app.run_polling()
 
 if __name__ == "__main__":
