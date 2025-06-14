@@ -21,7 +21,7 @@ TEMPERATURE    = float(os.getenv("OPENAI_TEMPERATURE", "0.2"))
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
-# — Параметры контекстной памяти и фильтрации —
+# — Параметры контекстной памяти —
 MAX_HISTORY           = 20
 MAX_SUMMARY_LEN       = 500
 REPLY_WINDOW          = 60        # секунд
@@ -208,6 +208,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not msg or not msg.text:
         return
 
+    # — Не отвечаем на старые сообщения —
     msg_date = msg.date
     if msg_date.tzinfo is None:
         msg_date = msg_date.replace(tzinfo=timezone.utc)
@@ -219,6 +220,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot_id       = context.bot.id
     bot_username = context.bot.username or ""
 
+    # — Явные триггеры: реплай, упоминание, имя бота —
     is_reply   = bool(msg.reply_to_message and msg.reply_to_message.from_user.id == bot_id)
     is_mention = any(
         ent.type == MessageEntity.MENTION and
@@ -227,13 +229,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     is_name    = bool(re.search(r"\b(?:бот|робот)\b", text, re.IGNORECASE))
 
+    # — Контекстное окно: только после первого ответа, по семантике —
     last_ts = context.chat_data.get("last_bot_ts")
-    initial = last_ts is None
-    within_window = False
-    semantic_ok = False
-    if not initial:
-        within_window = (now - last_ts) <= timedelta(seconds=REPLY_WINDOW)
-        if within_window:
+    is_context = False
+    if last_ts:
+        if (now - last_ts) <= timedelta(seconds=REPLY_WINDOW):
             last_emb = context.chat_data.get("last_bot_embedding")
             if last_emb:
                 emb_resp = await asyncio.to_thread(
@@ -241,25 +241,26 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     model="text-embedding-ada-002",
                     input=text
                 )
-                semantic_ok = cosine_similarity(
-                    emb_resp.data[0].embedding,
-                    last_emb
-                ) >= CONTEXT_SIM_THRESHOLD
+                similarity = sum(x*y for x,y in zip(emb_resp.data[0].embedding, last_emb))
+                similarity /= (math.sqrt(sum(x*x for x in emb_resp.data[0].embedding)) * math.sqrt(sum(y*y for y in last_emb)))
+                is_context = similarity >= CONTEXT_SIM_THRESHOLD
 
-    if not (initial or is_reply or is_mention or is_name or semantic_ok):
+    # — Отвечаем только если есть явный триггер или семантически близкий контекст —
+    if not (is_reply or is_mention or is_name or is_context):
         return
 
+    # — Обновляем историю и summary только из user-сообщений —
     history = context.chat_data.get("history", [])
     history.append({"role": "user", "content": text})
     summary = context.chat_data.get("summary", "")
-
     if len(history) > MAX_HISTORY:
-        to_sum  = [m for m in history[:-MAX_HISTORY] if m['role']=='user']
+        to_sum = [m for m in history[:-MAX_HISTORY] if m['role']=='user']
         new_sum = await summarize(to_sum)
         summary = f"{summary}\n{new_sum}".strip() if summary else new_sum
         context.chat_data["summary"] = summary
         history = history[-MAX_HISTORY:]
 
+    # — Формируем финальный prompt и отвечаем —
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "system", "content": "В любых ответах строго не выходить из образа Глеба Котова."},
