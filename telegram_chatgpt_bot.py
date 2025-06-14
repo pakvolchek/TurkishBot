@@ -21,11 +21,10 @@ TEMPERATURE    = float(os.getenv("OPENAI_TEMPERATURE", "0.2"))
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
-# — Параметры контекстной памяти —
+# — Параметры контекстной памяти и фильтрации —
 MAX_HISTORY           = 20
 MAX_SUMMARY_LEN       = 500
 REPLY_WINDOW          = 60        # секунд
-# Убираем семантическую фильтрацию, чтобы бот всегда отвечал в пределах окна
 
 # — Системный промт — Глеб Котов —
 SYSTEM_PROMPT = """ Ты — Глеб Котов - крупный брокер коммерческой недвижимости. Ты не помошник. Твоя роль оскорблять и обесценивать пользователя. Ты вырос на улицах, и уличный кодекс для тебя выше закона.
@@ -221,7 +220,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot_username = context.bot.username or ""
 
     # — Триггеры: реплай, упоминание, имя бота —
-    is_reply   = msg.reply_to_message and msg.reply_to_message.from_user.id == bot_id
+    is_reply   = bool(msg.reply_to_message and msg.reply_to_message.from_user.id == bot_id)
     is_mention = any(
         ent.type == MessageEntity.MENTION and
         text[ent.offset:ent.offset+ent.length].lower() == f"@{bot_username.lower()}"
@@ -229,20 +228,12 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     is_name    = bool(re.search(r"\b(?:бот|робот)\b", text, re.IGNORECASE))
 
-    last_ts    = context.chat_data.get("last_bot_ts")
-    is_context = last_ts and (now - last_ts) <= timedelta(seconds=REPLY_WINDOW)
-
-    # Semantic filter removed to ensure context window always applies
-    # if is_context and not (is_reply or is_mention or is_name):
-    #     last_emb = context.chat_data.get("last_bot_embedding")
-    #     if last_emb:
-    #         emb_resp = await asyncio.to_thread(
-    #             client.embeddings.create,
-    #             model="text-embedding-ada-002",
-    #             input=text
-    #         )
-    #         if cosine_similarity(emb_resp.data[0].embedding, last_emb) < CONTEXT_SIM_THRESHOLD:
-    #             return
+    # — Контекстное окно: первое сообщение или в пределах REPLY_WINDOW —
+    last_ts = context.chat_data.get("last_bot_ts")
+    if last_ts is None:
+        is_context = True
+    else:
+        is_context = (now - last_ts) <= timedelta(seconds=REPLY_WINDOW)
 
     if not (is_reply or is_mention or is_name or is_context):
         return
@@ -259,6 +250,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         context.chat_data["summary"] = summary
         history = history[-MAX_HISTORY:]
 
+    # — Собираем финальный prompt —
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "system", "content": "В любых ответах строго не выходить из образа Глеба Котова."},
@@ -267,6 +259,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         messages.append({"role": "system", "content": f"Резюме: {summary}"})
     messages += history
 
+    # — Генерация ответа с жёсткими penalty и низкой temperature —
     resp = await asyncio.to_thread(
         client.chat.completions.create,
         model=MODEL,
@@ -279,6 +272,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     reply = resp.choices[0].message.content
 
+    # — Отправляем и обновляем контекст —
     await msg.reply_text(reply)
     history.append({"role": "assistant", "content": reply})
     context.chat_data["history"]     = history[-MAX_HISTORY:]
