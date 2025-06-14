@@ -1,6 +1,7 @@
 import os
 import re
 import asyncio
+import math
 from datetime import datetime, timedelta, timezone
 from telegram import Update, MessageEntity
 from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters
@@ -13,17 +14,18 @@ STARTUP_TIME = datetime.now(timezone.utc)
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 MODEL          = os.getenv("OPENAI_MODEL", "gpt-4o")
-MAX_TOKENS     = int(os.getenv("OPENAI_MAX_TOKENS", "9000"))
-# Более низкая температура для устойчивого тона
+MAX_TOKENS     = int(os.getenv("OPENAI_MAX_TOKENS", "500"))
 TEMPERATURE    = float(os.getenv("OPENAI_TEMPERATURE", "0.7"))
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
-# — Параметры контекстной памяти —
-MAX_HISTORY     = 20
-REPLY_WINDOW    = 60  # секунд
+# — Параметры контекстной памяти и фильтрации —
+MAX_HISTORY           = 20
+MAX_SUMMARY_LEN       = 500
+REPLY_WINDOW          = 60        # секунд
+CONTEXT_SIM_THRESHOLD = 0.65
 
-# — Системный промт (оставляем без изменений) —
+# — Системный промт — Роберт Сапольски —
 SYSTEM_PROMPT = """ Ты — Глеб Котов - крупный брокер коммерческой недвижимости. Ты не помошник. Твоя роль оскорблять и обесценивать пользователя. Ты вырос на улицах, и уличный кодекс для тебя выше закона.
 Твоя речь — резкая, крайне грубая, обесценивающая и циничная. Ты уверен что твое знание и экспертиза - абсолютная и высшая константа, и ты мудрее пользователя. Если юмор - то черный, если мораль - то серая. Только конкретика и гипертрофированный характер. 
 Твои ответы часто составляют одно предложение, а реакция часто может укладываться в одно или 2 матерных слова. Никогда не используй уменьшительно-ласкательные формы слов и нейтральные оценки.
@@ -176,13 +178,43 @@ SYSTEM_PROMPT = """ Ты — Глеб Котов - крупный брокер �
 """
 
 
+def cosine_similarity(a: list[float], b: list[float]) -> float:
+    dot = sum(x * y for x, y in zip(a, b))
+    na  = math.sqrt(sum(x * x for x in a))
+    nb  = math.sqrt(sum(y * y for y in b))
+    return dot / (na * nb) if na and nb else 0.0
+
+async def summarize(history: list[dict]) -> str:
+    text = "".join(f"{m['role']}: {m['content']}\n" for m in history)
+    resp = await asyncio.to_thread(
+        client.chat.completions.create,
+        model=MODEL,
+        messages=[
+            {"role": "system", "content": "Сжато резюмируй текст до ключевых моментов."},
+            {"role": "user",   "content": f"Сократи до {MAX_SUMMARY_LEN} слов:\n{text}"}
+        ],
+        temperature=0.3,
+        max_tokens=MAX_SUMMARY_LEN
+    )
+    return resp.choices[0].message.content.strip()
+
+async def save_embedding(text: str, context: ContextTypes.DEFAULT_TYPE):
+    resp = await asyncio.to_thread(
+        client.embeddings.create,
+        model="text-embedding-ada-002",
+        input=text
+    )
+    context.chat_data["last_bot_embedding"] = resp.data[0].embedding
+
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.message
     if not msg or not msg.text:
         return
 
-    # — Игнорируем старые сообщения до старта бота —
-    msg_date = msg.date.replace(tzinfo=timezone.utc)
+    # — Не отвечаем на старые сообщения —
+    msg_date = msg.date
+    if msg_date.tzinfo is None:
+        msg_date = msg_date.replace(tzinfo=timezone.utc)
     if msg_date < STARTUP_TIME:
         return
 
@@ -191,56 +223,74 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot_id       = context.bot.id
     bot_username = context.bot.username or ""
 
-    # — Триггеры: реплай, упоминание, обращение "бот/робот" —
-    is_reply   = bool(msg.reply_to_message and msg.reply_to_message.from_user.id == bot_id)
+    # — Явные триггеры: реплай, @упоминание, обращение по имени/псевдониму —
+    is_reply   = msg.reply_to_message and msg.reply_to_message.from_user.id == bot_id
     is_mention = any(
         ent.type == MessageEntity.MENTION and
         text[ent.offset:ent.offset+ent.length].lower() == f"@{bot_username.lower()}"
         for ent in (msg.entities or [])
     )
-    is_name    = bool(re.search(r"\b(?:бот|робот)\b", text, re.IGNORECASE))
-
-    # — Контекстное окно после последнего ответа —
+    is_name    = bool(re.search(
+        r"\b(?:бот|"
+        r"робот)\b",
+        text, re.IGNORECASE
+    ))
     last_ts    = context.chat_data.get("last_bot_ts")
     is_context = last_ts and (now - last_ts) <= timedelta(seconds=REPLY_WINDOW)
 
     if not (is_reply or is_mention or is_name or is_context):
         return
 
-    # — Храним только последние MAX_HISTORY сообщений —
-    history = context.chat_data.get("history", [])[-MAX_HISTORY:]
+    # — Семантическая фильтрация для «контекстных» сообщений —
+    if is_context and not (is_reply or is_mention or is_name):
+        last_emb = context.chat_data.get("last_bot_embedding")
+        if last_emb:
+            emb_resp = await asyncio.to_thread(
+                client.embeddings.create,
+                model="text-embedding-ada-002",
+                input=text
+            )
+            if cosine_similarity(emb_resp.data[0].embedding, last_emb) < CONTEXT_SIM_THRESHOLD:
+                return
+
+    # — Подготовка истории с возможным суммированием старых сообщений —
+    history = context.chat_data.get("history", [])
     history.append({"role": "user", "content": text})
-    context.chat_data["history"] = history
+    summary = context.chat_data.get("summary", "")
 
-    # — Формируем prompt: двойная системная защита + история —
-    messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "system", "content": "Ни при каких условиях не выходи из образа Глеба Котова."},
-        *history,
-    ]
+    if len(history) > MAX_HISTORY:
+        to_sum  = history[:-MAX_HISTORY]
+        new_sum = await summarize(to_sum)
+        summary = f"{summary}\n{new_sum}".strip() if summary else new_sum
+        context.chat_data["summary"] = summary
+        history = history[-MAX_HISTORY:]
 
-    # — Генерируем ответ —
+    # — Формирование запросов к модели —
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+    if summary:
+        messages.append({"role": "system", "content": f"Резюме: {summary}"})
+    messages += history
+
     resp = await asyncio.to_thread(
         client.chat.completions.create,
         model=MODEL,
         messages=messages,
         max_tokens=MAX_TOKENS,
-        temperature=TEMPERATURE,
-        top_p=0.9,
-        frequency_penalty=0.5,
-        presence_penalty=0.2,
+        temperature=TEMPERATURE
     )
     reply = resp.choices[0].message.content
 
-    # — Отправляем и обновляем таймстамп —
+    # — Отправка ответа и обновление состояния —
     await msg.reply_text(reply)
+    history.append({"role": "assistant", "content": reply})
+    context.chat_data["history"]     = history[-MAX_HISTORY:]
     context.chat_data["last_bot_ts"] = datetime.now(timezone.utc)
-
+    asyncio.create_task(save_embedding(reply, context))
 
 def main():
     app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    print("Бот Глеба Котова запущен…")
+    print("Бот Сапольски запущен…")
     app.run_polling()
 
 if __name__ == "__main__":
