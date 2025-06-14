@@ -1,0 +1,2002 @@
+[
+ {
+  "title": "Alice's Adventures in Wonderland",
+  "author": "Lewis Carroll"
+ },
+ {
+  "title": "The Wonderful Wizard of Oz",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "Treasure Island",
+  "author": "Robert Louis Stevenson"
+ },
+ {
+  "title": "Gulliver's Travels",
+  "author": "Jonathan Swift"
+ },
+ {
+  "title": "The Prince",
+  "author": "Niccolò Machiavelli"
+ },
+ {
+  "title": "Through the Looking-Glass",
+  "author": "Lewis Carroll, Lewis Carroll, Lewis Lewis Carroll"
+ },
+ {
+  "title": "Wind in the Willows",
+  "author": "Kenneth Grahame, Michael Hague, John Burningham, David Roberts, Oxford Editor, Guo man, Yang Ma, Ernest H. Shepard, Charles Van Sandwyk, Katie Dicker"
+ },
+ {
+  "title": "Five Children and It",
+  "author": "Edith Nesbit"
+ },
+ {
+  "title": "A Midsummer Night's Dream",
+  "author": "William Shakespeare"
+ },
+ {
+  "title": "The Lost World",
+  "author": "Arthur Conan Doyle"
+ },
+ {
+  "title": "The Marvelous Land of Oz",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "Ozma of Oz",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "The Emerald City of Oz",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "Dorothy and the Wizard in Oz",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "The Lost Princess of Oz",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "The Story of the Amulet",
+  "author": "Edith Nesbit"
+ },
+ {
+  "title": "The Complete Life and Adventures of Santa Claus",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "Alice's Adventures in Wonderland / Through the Looking Glass",
+  "author": "Lewis Carroll"
+ },
+ {
+  "title": "The Road to Oz",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "The Sea Fairies",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "Baum's American Fairy Tales",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "Sky Island",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "The Scarecrow of Oz",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "The Patchwork Girl of Oz",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "The Magic of Oz",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "Tik-Tok of Oz",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "Rinkitink in Oz",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "The Enchanted Castle",
+  "author": "Edith Nesbit"
+ },
+ {
+  "title": "The Tin Woodman of Oz",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "The Hobbit",
+  "author": "J.R.R. Tolkien"
+ },
+ {
+  "title": "Glinda of Oz",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "The Magic City",
+  "author": "Edith Nesbit"
+ },
+ {
+  "title": "The Phoenix and the Carpet",
+  "author": "Edith Nesbit"
+ },
+ {
+  "title": "Nineteen Eighty-Four",
+  "author": "George Orwell"
+ },
+ {
+  "title": "Le avventure di Pinocchio",
+  "author": "Carlo Collodi"
+ },
+ {
+  "title": "Peter Pan",
+  "author": "J. M. Barrie"
+ },
+ {
+  "title": "Le Tour du Monde en Quatre-Vingts Jours",
+  "author": "Jules Verne"
+ },
+ {
+  "title": "Phantastes",
+  "author": "George MacDonald"
+ },
+ {
+  "title": "Le petit prince",
+  "author": "Antoine de Saint-Exupéry"
+ },
+ {
+  "title": "Harry Potter and the Philosopher's Stone",
+  "author": "J. K. Rowling"
+ },
+ {
+  "title": "Puck of Pook's Hill",
+  "author": "Rudyard Kipling"
+ },
+ {
+  "title": "The Fellowship of the Ring",
+  "author": "J.R.R. Tolkien"
+ },
+ {
+  "title": "The Enchanted Island of Yew",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "The Two Towers",
+  "author": "J.R.R. Tolkien"
+ },
+ {
+  "title": "Harry Potter and the Chamber of Secrets",
+  "author": "J. K. Rowling"
+ },
+ {
+  "title": "The Return of the King",
+  "author": "J.R.R. Tolkien"
+ },
+ {
+  "title": "The Royal Book of Oz",
+  "author": "Ruth Plumly Thompson"
+ },
+ {
+  "title": "Harry Potter and the Prisoner of Azkaban",
+  "author": "J. K. Rowling"
+ },
+ {
+  "title": "The Secret Agent",
+  "author": "Joseph Conrad"
+ },
+ {
+  "title": "Мастер и Маргарита",
+  "author": "Михаил Афанасьевич Булгаков"
+ },
+ {
+  "title": "Harry Potter and the Goblet of Fire",
+  "author": "J. K. Rowling, Jim Kay"
+ },
+ {
+  "title": "The reluctant dragon",
+  "author": "Kenneth Grahame, Jim Weiss, Ernest H. Shepard, Michael Hague, Kenneth Grahame, Kenneth Kenneth Grahame, Grahame Kenneth"
+ },
+ {
+  "title": "The Moon Pool",
+  "author": "A. Merritt"
+ },
+ {
+  "title": "Harry Potter and the Order of the Phoenix",
+  "author": "J. K. Rowling"
+ },
+ {
+  "title": "The Story of Doctor Dolittle",
+  "author": "Hugh Lofting"
+ },
+ {
+  "title": "News from Nowhere, or, An epoch of rest",
+  "author": "William Morris"
+ },
+ {
+  "title": "Charlie and the Chocolate Factory",
+  "author": "Roald Dahl"
+ },
+ {
+  "title": "A Princess of Mars",
+  "author": "Edgar Rice Burroughs"
+ },
+ {
+  "title": "The Princess and the Goblin",
+  "author": "George MacDonald"
+ },
+ {
+  "title": "Cien años de soledad",
+  "author": "Gabriel Garcia Marquez"
+ },
+ {
+  "title": "The wood beyond the world",
+  "author": "William Morris, William Norris, William, Morris, William Morris, William William Morris, WILLIAM MORRIS, Random House"
+ },
+ {
+  "title": "The water-babies",
+  "author": "Charles Kingsley, Charles Kingsley"
+ },
+ {
+  "title": "Sylvie and Bruno",
+  "author": "Lewis Carroll"
+ },
+ {
+  "title": "Jurgen",
+  "author": "James Branch Cabell"
+ },
+ {
+  "title": "The Horse and His Boy",
+  "author": "C.S. Lewis"
+ },
+ {
+  "title": "Wet Magic",
+  "author": "Edith Nesbit"
+ },
+ {
+  "title": "Peter Pan in Kensington Gardens",
+  "author": "J. M. Barrie"
+ },
+ {
+  "title": "The Magician's Nephew",
+  "author": "C.S. Lewis"
+ },
+ {
+  "title": "The Master Key",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "The Lion, the Witch and the Wardrobe",
+  "author": "C.S. Lewis"
+ },
+ {
+  "title": "James and the Giant Peach",
+  "author": "Roald Dahl"
+ },
+ {
+  "title": "Harry Potter and the Half-Blood Prince",
+  "author": "J. K. Rowling, Mary GrandPré"
+ },
+ {
+  "title": "Charlotte's Web",
+  "author": "E. B. White"
+ },
+ {
+  "title": "The Silmarillion",
+  "author": "J.R.R. Tolkien"
+ },
+ {
+  "title": "Prince Caspian",
+  "author": "C.S. Lewis"
+ },
+ {
+  "title": "Northern Lights",
+  "author": "Philip Pullman"
+ },
+ {
+  "title": "The BFG",
+  "author": "Roald Dahl"
+ },
+ {
+  "title": "Lost Horizon",
+  "author": "James Hilton"
+ },
+ {
+  "title": "Harry Potter and the Deathly Hallows",
+  "author": "J. K. Rowling"
+ },
+ {
+  "title": "Where the Wild Things Are",
+  "author": "Maurice Sendak"
+ },
+ {
+  "title": "Little Wizard stories of Oz",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "The Well at the World's End",
+  "author": "William Morris"
+ },
+ {
+  "title": "The Silver Chair",
+  "author": "C.S. Lewis"
+ },
+ {
+  "title": "The Voyages of Doctor Dolittle",
+  "author": "Hugh Lofting"
+ },
+ {
+  "title": "Der Kleine Prinz (German)",
+  "author": "Antoine de Saint-Exupéry"
+ },
+ {
+  "title": "Brood of the Witch-Queen",
+  "author": "Sax Rohmer"
+ },
+ {
+  "title": "A strange manuscript found in a copper cylinder",
+  "author": "James De Mille"
+ },
+ {
+  "title": "Momo oder Die seltsame Geschichte von den Zeit-Dieben und von dem Kind, das den Menschen die gestohlene Zeit zurückbrachte",
+  "author": "Michael Ende"
+ },
+ {
+  "title": "The Last Battle",
+  "author": "C.S. Lewis"
+ },
+ {
+  "title": "The Subtle Knife",
+  "author": "Philip Pullman"
+ },
+ {
+  "title": "Bridge to Terabithia",
+  "author": "Katherine Paterson"
+ },
+ {
+  "title": "Catching Fire",
+  "author": "Suzanne Collins"
+ },
+ {
+  "title": "The Voyage of the Dawn Treader",
+  "author": "C.S. Lewis"
+ },
+ {
+  "title": "The Lightning Thief",
+  "author": "Rick Riordan"
+ },
+ {
+  "title": "Watership Down",
+  "author": "Richard Adams"
+ },
+ {
+  "title": "The Gunslinger",
+  "author": "Stephen King"
+ },
+ {
+  "title": "Artemis Fowl",
+  "author": "Eoin Colfer"
+ },
+ {
+  "title": "The Colour of Magic",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "New Moon",
+  "author": "Stephenie Meyer"
+ },
+ {
+  "title": "A Game of Thrones",
+  "author": "George R. R. Martin"
+ },
+ {
+  "title": "Vikram and the Vampire",
+  "author": "Richard Francis Burton, Ernest Henry Griset, Isabel Lady Burton, Ernest Griset"
+ },
+ {
+  "title": "The Cat in the Hat",
+  "author": "Dr. Seuss, Simon Mugford"
+ },
+ {
+  "title": "The wonderful visit",
+  "author": "H. G. Wells"
+ },
+ {
+  "title": "Hänsel und Gretel",
+  "author": "Brothers Grimm"
+ },
+ {
+  "title": "Coraline",
+  "author": "Neil Gaiman, Neil Gaiman"
+ },
+ {
+  "title": "A Wizard of Earthsea",
+  "author": "Ursula K. Le Guin"
+ },
+ {
+  "title": "The Once and Future King",
+  "author": "T. H. White"
+ },
+ {
+  "title": "The Magical Monarch of Mo",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "Thumbelina",
+  "author": "Hans Christian Andersen, Elsa Beskow, Michael Foreman, Michael Morpurgo, Kimberley Reynolds, Catherine Babok, Susannah Mary Paull"
+ },
+ {
+  "title": "The Amber Spyglass",
+  "author": "Philip Pullman"
+ },
+ {
+  "title": "A Prisoner in Fairyland",
+  "author": "Algernon Blackwood"
+ },
+ {
+  "title": "The Nursery Alice",
+  "author": "Lewis Carroll"
+ },
+ {
+  "title": "Indian Fairy Tales",
+  "author": "Joseph Jacobs, John D Batten, Gloria Cardew, Joseph JACOBS, Joseph Jacobs, Jacobs, Ed, Joseph, John Dickson Batten, Joseph Joseph Jacobs"
+ },
+ {
+  "title": "Good Omens",
+  "author": "Neil Gaiman, Terry Pratchett"
+ },
+ {
+  "title": "The Blazing World",
+  "author": "Margaret Cavendish"
+ },
+ {
+  "title": "American Gods",
+  "author": "Neil Gaiman"
+ },
+ {
+  "title": "Doctor Doolittle's circus",
+  "author": "Hugh Lofting"
+ },
+ {
+  "title": "Wizard and Glass",
+  "author": "Stephen King"
+ },
+ {
+  "title": "The Waste Lands",
+  "author": "Stephen King"
+ },
+ {
+  "title": "The Sea of Monsters",
+  "author": "Rick Riordan"
+ },
+ {
+  "title": "The Eye of the World (The Wheel of Time Book 1)",
+  "author": "Robert Jordan"
+ },
+ {
+  "title": "Nils Holgerssons underbara resa genom Sverige",
+  "author": "Selma Lagerlöf"
+ },
+ {
+  "title": "Dragonflight",
+  "author": "Anne McCaffrey"
+ },
+ {
+  "title": "The Tombs of Atuan",
+  "author": "Ursula K. Le Guin"
+ },
+ {
+  "title": "Doctor Dolittle's post office",
+  "author": "Hugh Lofting"
+ },
+ {
+  "title": "Tarzan the Invincible (Ace Classic SF, F-189)",
+  "author": "Edgar Rice Burroughs, Casper Van Dien, Franke, Henry G., 3rd, Joe Jusko"
+ },
+ {
+  "title": "Doctor Dolittle in the moon",
+  "author": "Hugh Lofting"
+ },
+ {
+  "title": "Le chat botté",
+  "author": "Charles Perrault"
+ },
+ {
+  "title": "The Centaur",
+  "author": "Algernon Blackwood"
+ },
+ {
+  "title": "Night Shift",
+  "author": "Stephen King"
+ },
+ {
+  "title": "The Eyes of the Dragon",
+  "author": "Stephen King"
+ },
+ {
+  "title": "The talisman",
+  "author": "Stephen King, Peter Straub"
+ },
+ {
+  "title": "The Phantom Tollbooth",
+  "author": "Norton Juster"
+ },
+ {
+  "title": "Life, the Universe and Everything",
+  "author": "Douglas Adams"
+ },
+ {
+  "title": "Artemis Fowl and the Eternity Code",
+  "author": "Eoin Colfer"
+ },
+ {
+  "title": "Stardust",
+  "author": "Neil Gaiman"
+ },
+ {
+  "title": "The Farthest Shore",
+  "author": "Ursula K. Le Guin"
+ },
+ {
+  "title": "Eragon",
+  "author": "Christopher Paolini"
+ },
+ {
+  "title": "A Clash of Kings",
+  "author": "George R. R. Martin"
+ },
+ {
+  "title": "The Chronicles of Narnia",
+  "author": "C.S. Lewis"
+ },
+ {
+  "title": "Tintenherz",
+  "author": "Cornelia Funke"
+ },
+ {
+  "title": "Mort",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Everything's Eventual. 14 Dark Tales",
+  "author": "Stephen King"
+ },
+ {
+  "title": "The Light Fantastic",
+  "author": "Terry Pratchett, Ernest Riera"
+ },
+ {
+  "title": "Something Wicked This Way Comes",
+  "author": "Ray Bradbury"
+ },
+ {
+  "title": "The Titan's Curse",
+  "author": "Rick Riordan"
+ },
+ {
+  "title": "Yu-Gi-Oh!",
+  "author": "Kazuki Takahashi"
+ },
+ {
+  "title": "The Enchanted Typewriter",
+  "author": "John Kendrick Bangs"
+ },
+ {
+  "title": "The Battle of the Labyrinth",
+  "author": "Rick Riordan"
+ },
+ {
+  "title": "The dark is rising",
+  "author": "Susan Cooper"
+ },
+ {
+  "title": "Black house",
+  "author": "Stephen King, Peter Straub"
+ },
+ {
+  "title": "Mary Poppins",
+  "author": "P. L. Travers"
+ },
+ {
+  "title": "Tom's Midnight Garden",
+  "author": "Philippa Pearce"
+ },
+ {
+  "title": "Guards! Guards!",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Rose Madder",
+  "author": "Stephen King"
+ },
+ {
+  "title": "Doctor Dolittle's garden",
+  "author": "Hugh Lofting"
+ },
+ {
+  "title": "The Regulators",
+  "author": "Stephen King"
+ },
+ {
+  "title": "The Last Olympian",
+  "author": "Rick Riordan"
+ },
+ {
+  "title": "Die unendliche Geschichte",
+  "author": "Michael Ende"
+ },
+ {
+  "title": "La Petite Sirene (French Well Loved Tales)",
+  "author": "Hans Christian Andersen, Yayoi Kusama, Bernadette Watts"
+ },
+ {
+  "title": "Trollkarlens hatt",
+  "author": "Tove Jansson"
+ },
+ {
+  "title": "Farmer Giles of Ham",
+  "author": "J.R.R. Tolkien"
+ },
+ {
+  "title": "Mostly Harmless",
+  "author": "Douglas Adams"
+ },
+ {
+  "title": "Flat Stanley",
+  "author": "Jeff Brown, Jon Mitchell, Tomi Ungerer, Tony Ross"
+ },
+ {
+  "title": "Corduroy",
+  "author": "Don Freeman"
+ },
+ {
+  "title": "Wizard's First Rule",
+  "author": "Terry Goodkind"
+ },
+ {
+  "title": "Equal Rites",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Tale of Despereaux",
+  "author": "Kate DiCamillo"
+ },
+ {
+  "title": "The Lost Hero",
+  "author": "Rick Riordan"
+ },
+ {
+  "title": "Dragonquest",
+  "author": "Anne McCaffrey"
+ },
+ {
+  "title": "Wintersmith",
+  "author": "Terry Pratchett, Paul Kidby"
+ },
+ {
+  "title": "Wicked",
+  "author": "Gregory Maguire"
+ },
+ {
+  "title": "Artemis Fowl and the Arctic Incident",
+  "author": "Eoin Colfer"
+ },
+ {
+  "title": "Over Sea, Under Stone (The Dark Is Rising #1)",
+  "author": "Susan Cooper"
+ },
+ {
+  "title": "The Name of the Wind",
+  "author": "Patrick Rothfuss"
+ },
+ {
+  "title": "Lords and Ladies",
+  "author": "Terry Pratchett, Nigel Planer, Tony Robinson"
+ },
+ {
+  "title": "The Wee Free Men",
+  "author": "Terry Pratchett, Paul Kidby"
+ },
+ {
+  "title": "Jonathan Strange and Mr. Norrell",
+  "author": "Susanna Clarke, Susanna Clarke"
+ },
+ {
+  "title": "The Human Chord",
+  "author": "Algernon Blackwood"
+ },
+ {
+  "title": "Sourcery",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Wolves of the Calla",
+  "author": "Stephen King"
+ },
+ {
+  "title": "Redwall (Redwall #1)",
+  "author": "Brian Jacques"
+ },
+ {
+  "title": "Wyrd Sisters",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Oryx and Crake",
+  "author": "Margaret Atwood"
+ },
+ {
+  "title": "Small Gods",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Mahō sensei Negima",
+  "author": "Ken Akamatsu"
+ },
+ {
+  "title": "The Ocean at the End of the Lane",
+  "author": "Neil Gaiman, Mónica Faerna, Patrick Marcel, Lluís Delgado, Oriol Hernández"
+ },
+ {
+  "title": "A Hat Full of Sky",
+  "author": "Terry Pratchett, Paul Kidby, Terry Pratchett"
+ },
+ {
+  "title": "The magic Faraway Tree",
+  "author": "Enid Blyton"
+ },
+ {
+  "title": "The Passage",
+  "author": "Justin Cronin"
+ },
+ {
+  "title": "Adela Cathcart",
+  "author": "George MacDonald"
+ },
+ {
+  "title": "My father's dragon",
+  "author": "Ruth Stiles Gannett"
+ },
+ {
+  "title": "Black Cauldron (Chronicles of Prydain",
+  "author": "Lloyd Alexander"
+ },
+ {
+  "title": "The Great Hunt (The Wheel of Time Book 2)",
+  "author": "Robert Jordan"
+ },
+ {
+  "title": "À rebours",
+  "author": "Joris-Karl Huysmans"
+ },
+ {
+  "title": "Neverwhere",
+  "author": "Neil Gaiman"
+ },
+ {
+  "title": "Dragonfly in Amber",
+  "author": "Diana Gabaldon"
+ },
+ {
+  "title": "Swimmy",
+  "author": "Leo Lionni, Xosé Manuel González, Ignasi Centelles"
+ },
+ {
+  "title": "Interesting Times",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "The Tales of Beedle the Bard",
+  "author": "J. K. Rowling"
+ },
+ {
+  "title": "The Amazing Maurice and His Educated Rodents",
+  "author": "Terry Pratchett, Javier Calvo Perales"
+ },
+ {
+  "title": "Pyramids",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Kometen kommer (Kometjakten)",
+  "author": "Tove Jansson"
+ },
+ {
+  "title": "Mistress Masham's Repose",
+  "author": "T. H. White"
+ },
+ {
+  "title": "The House on the Borderland",
+  "author": "William Hope Hodgson"
+ },
+ {
+  "title": "Danny and the Dinosaur",
+  "author": "Syd Hoff"
+ },
+ {
+  "title": "Anansi Boys",
+  "author": "Neil Gaiman"
+ },
+ {
+  "title": "The Book Of Three",
+  "author": "Alexander, Lloyd Alexander"
+ },
+ {
+  "title": "The Trumpet of the Swan",
+  "author": "E. B. White"
+ },
+ {
+  "title": "The return",
+  "author": "Walter De la Mare"
+ },
+ {
+  "title": "White oleander",
+  "author": "Fitch, Janet"
+ },
+ {
+  "title": "The box of delights, or When the wolves were running",
+  "author": "John Masefield"
+ },
+ {
+  "title": "Mattimeo (Redwall #3)",
+  "author": "Brian Jacques, Brajan Dzhejks, Brian Jacques - undifferentiated"
+ },
+ {
+  "title": "Charmed Life (Chrestomanci, Book 1)",
+  "author": "Diana Wynne Jones"
+ },
+ {
+  "title": "How the Grinch Stole Christmas!",
+  "author": "Dr. Seuss, Rik Mayall"
+ },
+ {
+  "title": "Brisingr",
+  "author": "Christopher Paolini"
+ },
+ {
+  "title": "Men at Arms",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Reaper Man",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Sabriel",
+  "author": "Garth Nix"
+ },
+ {
+  "title": "A Storm of Swords",
+  "author": "George R. R. Martin"
+ },
+ {
+  "title": "Eldest",
+  "author": "Christopher Paolini"
+ },
+ {
+  "title": "The worm Ouroboros",
+  "author": "Eric Rücker Eddison"
+ },
+ {
+  "title": "Assassin of Gor",
+  "author": "John Norman, John Norman"
+ },
+ {
+  "title": "The Wolves of Willoughby Chase (Wolves #1)",
+  "author": "Joan Aiken"
+ },
+ {
+  "title": "Gregor the Overlander",
+  "author": "Suzanne Collins"
+ },
+ {
+  "title": "In the Night Kitchen",
+  "author": "Maurice Sendak"
+ },
+ {
+  "title": "The Final Empire",
+  "author": "Brandon Sanderson"
+ },
+ {
+  "title": "A Feast for Crows",
+  "author": "George R. R. Martin"
+ },
+ {
+  "title": "A Wind in the Door (Time Quintet #2",
+  "author": "Madeleine L'Engle"
+ },
+ {
+  "title": "Thud!",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "El reino del dragón de oro",
+  "author": "Isabel Allende"
+ },
+ {
+  "title": "The Grey King (The Dark is Rising #4)",
+  "author": "Susan Cooper"
+ },
+ {
+  "title": "The Graveyard Book",
+  "author": "Neil Gaiman"
+ },
+ {
+  "title": "Haroun and the Sea of Stories",
+  "author": "Salman Rushdie"
+ },
+ {
+  "title": "Hogfather",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Witches Abroad",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Eric",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Feet of Clay",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "The dark tower",
+  "author": "Stephen King"
+ },
+ {
+  "title": "Frostgrave",
+  "author": "Joseph A. McCullough"
+ },
+ {
+  "title": "Queen Zixi of Ix; or, Story of the Magic Cloak, The",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "Winnie-the-Pooh / The House at Pooh Corner",
+  "author": "A. A. Milne"
+ },
+ {
+  "title": "The High King (Chronicles of Prydain)",
+  "author": "Lloyd Alexander"
+ },
+ {
+  "title": "John Dough and the cherub",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "The Sword of Shannara",
+  "author": "Terry Brooks"
+ },
+ {
+  "title": "The Mark of Athena",
+  "author": "Rick Riordan"
+ },
+ {
+  "title": "Carpe Jugulum",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Stone of Tears",
+  "author": "Terry Goodkind"
+ },
+ {
+  "title": "Dead Until Dark (Sookie Stackhouse, #1)",
+  "author": "Charlaine Harris"
+ },
+ {
+  "title": "The Wishing Spell",
+  "author": "Chris Colfer"
+ },
+ {
+  "title": "Maskerade",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Monstrous Regiment",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Nomads of Gor",
+  "author": "John Norman, Ralph Lister, John Norman, Bruno Martin"
+ },
+ {
+  "title": "Cloud Atlas",
+  "author": "David Mitchell"
+ },
+ {
+  "title": "The Last Continent",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Shardik",
+  "author": "Richard Adams"
+ },
+ {
+  "title": "Warriors (#1)",
+  "author": "Erin Hunter"
+ },
+ {
+  "title": "The Throne of Fire",
+  "author": "Rick Riordan"
+ },
+ {
+  "title": "The Spook's Apprentice",
+  "author": "Joseph Delaney"
+ },
+ {
+  "title": "Moving Pictures",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "三体",
+  "author": "刘慈欣"
+ },
+ {
+  "title": "The City of Ember (The First Book of Ember)",
+  "author": "Jeanne DuPrau"
+ },
+ {
+  "title": "Policeman Bluejay (1907)",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "Soul Music",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Dragonsong",
+  "author": "Anne McCaffrey"
+ },
+ {
+  "title": "The Truth",
+  "author": "Terry Pratchett, Stephen Briggs"
+ },
+ {
+  "title": "The Crystal Cave",
+  "author": "Mary Stewart, Mary Stwart"
+ },
+ {
+  "title": "Muminpappans bravader / Muminpappans memoarer",
+  "author": "Tove Jansson"
+ },
+ {
+  "title": "Dirk Gently’s Holistic Detective Agency",
+  "author": "Douglas Adams"
+ },
+ {
+  "title": "Princess and the Pea",
+  "author": "Hans Christian Andersen, Barbara Lanza, Kari James"
+ },
+ {
+  "title": "The Indian in the Cupboard",
+  "author": "Lynne Reid Banks"
+ },
+ {
+  "title": "Ella Enchanted",
+  "author": "Gail Carson Levine"
+ },
+ {
+  "title": "The Isles of Sunset",
+  "author": "Arthur Christopher Benson"
+ },
+ {
+  "title": "Jingo",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "The Complete Works of Lewis Carroll",
+  "author": "Lewis Carroll"
+ },
+ {
+  "title": "The Fires of Heaven",
+  "author": "Robert Jordan"
+ },
+ {
+  "title": "The Minpins",
+  "author": "Roald Dahl"
+ },
+ {
+  "title": "The Woggle-Bug book (1905)",
+  "author": "L. Frank Baum"
+ },
+ {
+  "title": "How to train your dragon",
+  "author": "Cressida Cowell"
+ },
+ {
+  "title": "The Brick Moon and Other Stories",
+  "author": "Edward Everett Hale"
+ },
+ {
+  "title": "Pippi Langstrump i Söderhavet",
+  "author": "Astrid Lindgren"
+ },
+ {
+  "title": "Crossroads of Twilight",
+  "author": "Robert Jordan"
+ },
+ {
+  "title": "A Crown of Swords (The Wheel of Time, Book 7)",
+  "author": "Robert Jordan"
+ },
+ {
+  "title": "Harry Potter and the Cursed Child",
+  "author": "Jack Thorne, John Tiffany, J. K. Rowling"
+ },
+ {
+  "title": "The Son of Neptune",
+  "author": "Rick Riordan"
+ },
+ {
+  "title": "Saving the World and Other Extreme Sports",
+  "author": "James Patterson, Valentina de Angelis"
+ },
+ {
+  "title": "Greenwitch (The Dark Is Rising #3)",
+  "author": "Susan Cooper"
+ },
+ {
+  "title": "Temple of the Winds",
+  "author": "Terry Goodkind"
+ },
+ {
+  "title": "Dragons of Spring Dawning",
+  "author": "Margaret Weis, Tracy Hickman, Andrew Dabb, Paul Boehmer"
+ },
+ {
+  "title": "Prince Prigio",
+  "author": "Andrew Lang"
+ },
+ {
+  "title": "Only You Can Save Mankind",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Beyond the Deepwoods",
+  "author": "Paul Stewart, Chris Riddell, Volker Niederfahrenhorst"
+ },
+ {
+  "title": "Six of Crows",
+  "author": "Leigh Bardugo"
+ },
+ {
+  "title": "Nation",
+  "author": "Terry Pratchett, Stephen Briggs"
+ },
+ {
+  "title": "The Magician's Elephant",
+  "author": "Kate DiCamillo"
+ },
+ {
+  "title": "Abhorsen",
+  "author": "Garth Nix"
+ },
+ {
+  "title": "The Castle of Llyr",
+  "author": "Lloyd Alexander"
+ },
+ {
+  "title": "Mariel of Redwall",
+  "author": "Brian Jacques"
+ },
+ {
+  "title": "Beelzebub's tales to his grandson",
+  "author": "Georges Ivanovitch Gurdjieff, A. Orage, Jeanne de Salzmann, Henri Tracol"
+ },
+ {
+  "title": "Magic Kingdom For Sale/Sold!",
+  "author": "Terry Brooks"
+ },
+ {
+  "title": "Trollvinter",
+  "author": "Tove Jansson"
+ },
+ {
+  "title": "Skulduggery Pleasant",
+  "author": "Derek Landy, LANDY DEREK, Tom Percival"
+ },
+ {
+  "title": "Elantris",
+  "author": "Brandon Sanderson"
+ },
+ {
+  "title": "The mouse and his child",
+  "author": "Russell Hoban, David Small"
+ },
+ {
+  "title": "Thief of Time",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "The Amulet of Samarkand",
+  "author": "Jonathan Stroud"
+ },
+ {
+  "title": "Pillars of Creation",
+  "author": "Terry Goodkind"
+ },
+ {
+  "title": "The Sword of Summer",
+  "author": "Rick Riordan"
+ },
+ {
+  "title": "The cuckoo clock",
+  "author": "Mary Louisa Molesworth"
+ },
+ {
+  "title": "Ultimate Spider-Man",
+  "author": "Brian Michael Bendis, Mark Bagley, Marvel Comics, Trevor Hairsine, Joe Quesada, Andy Kubert, Danny Miki, Stuart Immonen"
+ },
+ {
+  "title": "Farlig midsommar",
+  "author": "Tove Jansson"
+ },
+ {
+  "title": "Dragons of Autumn Twilight",
+  "author": "Margaret Weis, Tracy Hickman, Paul Boehmer, Andrew Dabb, Steve Kurth, Stefano Raffaele, Margarett Weiss"
+ },
+ {
+  "title": "Swords Against Wizardry",
+  "author": "Fritz Leiber"
+ },
+ {
+  "title": "The Path of Daggers",
+  "author": "Robert Jordan"
+ },
+ {
+  "title": "Circe",
+  "author": "Madeline Miller"
+ },
+ {
+  "title": "The Spiderwick Chronicles",
+  "author": "Tony DiTerlizzi, Holly Black"
+ },
+ {
+  "title": "Jacob Two-Two Meets the Hooded Fang",
+  "author": "Mordecai Richler"
+ },
+ {
+  "title": "Drachenreiter",
+  "author": "Cornelia Funke"
+ },
+ {
+  "title": "Fox in Socks",
+  "author": "Dr. Seuss"
+ },
+ {
+  "title": "Swords Against Death",
+  "author": "Fritz Leiber"
+ },
+ {
+  "title": "Mary Poppins comes back",
+  "author": "P. L. Travers, Mary Shepard"
+ },
+ {
+  "title": "I Shall Wear Midnight",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Truckers",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Gregor and the Prophecy of Bane",
+  "author": "Suzanne Collins"
+ },
+ {
+  "title": "Captive of Gor",
+  "author": "John Norman, Lexi Maynard, Norman John"
+ },
+ {
+  "title": "The Princess Bride",
+  "author": "William Goldman"
+ },
+ {
+  "title": "Howl's Moving Castle (Howl's Moving Castle #1)",
+  "author": "Diana Wynne Jones"
+ },
+ {
+  "title": "Swords and Deviltry",
+  "author": "Fritz Leiber"
+ },
+ {
+  "title": "Winter's Heart",
+  "author": "Robert Jordan"
+ },
+ {
+  "title": "Going Postal",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Lord of Chaos",
+  "author": "Robert Jordan"
+ },
+ {
+  "title": "Quidditch Through the Ages",
+  "author": "J. K. Rowling"
+ },
+ {
+  "title": "The Spiderwick Chronicles",
+  "author": "Tony DiTerlizzi, Holly Black"
+ },
+ {
+  "title": "Witch Week (The Chrestomanci)",
+  "author": "Diana Wynne Jones"
+ },
+ {
+  "title": "The Hero and the Crown",
+  "author": "Robin McKinley"
+ },
+ {
+  "title": "Mister Monday (The Keys to the Kingdom, Book 1)",
+  "author": "Garth Nix"
+ },
+ {
+  "title": "Mary Poppins Opens the Door",
+  "author": "P. L. Travers, Mary Shepard, Agnes Sims"
+ },
+ {
+  "title": "Gregor and the Curse of the Warmbloods",
+  "author": "Suzanne Collins"
+ },
+ {
+  "title": "Silver on the Tree (The Dark Is Rising #5)",
+  "author": "Susan Cooper"
+ },
+ {
+  "title": "Soul of the Fire",
+  "author": "Terry Goodkind"
+ },
+ {
+  "title": "Tehanu (The Earthsea Cycle, Book 4)",
+  "author": "Ursula K. Le Guin"
+ },
+ {
+  "title": "Knife of Dreams",
+  "author": "Robert Jordan"
+ },
+ {
+  "title": "The Blue Sword",
+  "author": "Robin McKinley"
+ },
+ {
+  "title": "Fifty-one tales",
+  "author": "Lord Dunsany"
+ },
+ {
+  "title": "The Golem's Eye",
+  "author": "Jonathan Stroud"
+ },
+ {
+  "title": "Alice's Adventures in Wonderland / Through the Looking-Glass / The Hunting of the Snark",
+  "author": "Lewis Carroll"
+ },
+ {
+  "title": "Ostatnie Życzenie",
+  "author": "Andrzej Sapkowski"
+ },
+ {
+  "title": "Angel Island",
+  "author": "Inez Haynes Gillmore"
+ },
+ {
+  "title": "Mushoku Tensei",
+  "author": "理不尽な孫の手"
+ },
+ {
+  "title": "Dragonsinger",
+  "author": "Anne McCaffrey"
+ },
+ {
+  "title": "I Took the Moon for a Walk",
+  "author": "Carolyn Curtis"
+ },
+ {
+  "title": "Assassin's Apprentice",
+  "author": "Robin Hobb"
+ },
+ {
+  "title": "The Magicians of Caprona",
+  "author": "Diana Wynne Jones"
+ },
+ {
+  "title": "Lirael Daughter of the Clayr",
+  "author": "Garth Nix"
+ },
+ {
+  "title": "Shadow and Bone",
+  "author": "Leigh Bardugo"
+ },
+ {
+  "title": "The Lives of Christopher Chant (Chrestomanci, Book 2)",
+  "author": "Diana Wynne Jones"
+ },
+ {
+  "title": "Tintenblut",
+  "author": "Cornelia Funke"
+ },
+ {
+  "title": "Mary Poppins in the Park",
+  "author": "P. L. Travers"
+ },
+ {
+  "title": "A Dance With Dragons",
+  "author": "George R. R. Martin"
+ },
+ {
+  "title": "The Way of Kings",
+  "author": "Brandon Sanderson"
+ },
+ {
+  "title": "Pappan och havet",
+  "author": "Tove Jansson"
+ },
+ {
+  "title": "Artemis Fowl and the Time Paradox",
+  "author": "Eoin Colfer"
+ },
+ {
+  "title": "Dance of the Gods",
+  "author": "Nora Roberts"
+ },
+ {
+  "title": "Marauders of Gor",
+  "author": "John Norman"
+ },
+ {
+  "title": "Der satanarchäolygenialkohöllische Wunschpunsch",
+  "author": "Michael Ende"
+ },
+ {
+  "title": "The Machineries of Joy",
+  "author": "Ray Bradbury"
+ },
+ {
+  "title": "The Book of Wonder",
+  "author": "Lord Dunsany"
+ },
+ {
+  "title": "Swords in the Mist",
+  "author": "Fritz Leiber"
+ },
+ {
+  "title": "The Spiderwick Chronicles",
+  "author": "Tony DiTerlizzi, Holly Black"
+ },
+ {
+  "title": "The Spiderwick Chronicles",
+  "author": "Holly Black, Tony DiTerlizzi"
+ },
+ {
+  "title": "The Colors of Space",
+  "author": "Marion Zimmer Bradley"
+ },
+ {
+  "title": "ElfQuest",
+  "author": "Wendy Pini"
+ },
+ {
+  "title": "Alcatraz versus the Evil Librarians",
+  "author": "Brandon Sanderson"
+ },
+ {
+  "title": "The Carpet People",
+  "author": "Terry Pratchett, David John"
+ },
+ {
+  "title": "Tales from Earthsea (The Earthsea Cycle, Book 5)",
+  "author": "Ursula K. Le Guin"
+ },
+ {
+  "title": "Rising Storm",
+  "author": "Erin Hunter"
+ },
+ {
+  "title": "From dead to worse",
+  "author": "Charlaine Harris"
+ },
+ {
+  "title": "Gardens of the Moon",
+  "author": "Steven Erikson"
+ },
+ {
+  "title": "Nightbirds on Nantucket (Wolves #3)",
+  "author": "Joan Aiken, Robin Jacques"
+ },
+ {
+  "title": "The Crock of Gold",
+  "author": "James Stephens"
+ },
+ {
+  "title": "The Borrowers",
+  "author": "Mary Norton"
+ },
+ {
+  "title": "Det osynliga barnet och andra berättelser",
+  "author": "Tove Jansson"
+ },
+ {
+  "title": "The Hero of Ages",
+  "author": "Brandon Sanderson"
+ },
+ {
+  "title": "Hyperion",
+  "author": "Dan Simmons"
+ },
+ {
+  "title": "Gregor and the Marks of Secret",
+  "author": "Suzanne Collins"
+ },
+ {
+  "title": "A Court of Thorns and Roses",
+  "author": "Sarah J. Maas"
+ },
+ {
+  "title": "The children of Green Knowe",
+  "author": "Lucy M. Boston"
+ },
+ {
+  "title": "Tales from the Perilous Realm",
+  "author": "J.R.R. Tolkien"
+ },
+ {
+  "title": "The Tangle Box",
+  "author": "Terry Brooks"
+ },
+ {
+  "title": "The Capture (Guardians of Ga'Hoole, Book 1)",
+  "author": "Kathryn Lasky, Pamela Garelick"
+ },
+ {
+  "title": "Summerland",
+  "author": "Michael Chabon"
+ },
+ {
+  "title": "Outcast of Redwall (Redwall #8)",
+  "author": "Brian Jacques"
+ },
+ {
+  "title": "A Memory of Light",
+  "author": "Robert Jordan, Brandon Sanderson"
+ },
+ {
+  "title": "Flyte [UNABRIDGED CD] (Audiobook) (Book 2, The Septimus Heap series)",
+  "author": "Angie Sage, Angie Sage, Mark Zug"
+ },
+ {
+  "title": "In the Hand of the Goddess",
+  "author": "Tamora Pierce"
+ },
+ {
+  "title": "The Cat in the Hat Comes Back",
+  "author": "Dr. Seuss"
+ },
+ {
+  "title": "Triss (Redwall #15)",
+  "author": "Brian Jacques"
+ },
+ {
+  "title": "The Little White Horse",
+  "author": "Elizabeth Goudge"
+ },
+ {
+  "title": "Wizard At Large",
+  "author": "Terry Brooks"
+ },
+ {
+  "title": "The Spook's Curse",
+  "author": "Joseph Delaney"
+ },
+ {
+  "title": "A Court of Mist and Fury",
+  "author": "Sarah J. Maas"
+ },
+ {
+  "title": "The Wise Man’s Fear",
+  "author": "Patrick Rothfuss"
+ },
+ {
+  "title": "Wings in the Night",
+  "author": "Robert E. Howard"
+ },
+ {
+  "title": "High Deryni",
+  "author": "Katherine Kurtz"
+ },
+ {
+  "title": "The Paradise War (The Song of Albion #1)",
+  "author": "Stephen R. Lawhead"
+ },
+ {
+  "title": "The midnight folk",
+  "author": "John Masefield"
+ },
+ {
+  "title": "Phantom",
+  "author": "Terry Goodkind"
+ },
+ {
+  "title": "Chainfire",
+  "author": "Terry Goodkind"
+ },
+ {
+  "title": "Club dead",
+  "author": "Charlaine Harris"
+ },
+ {
+  "title": "A Spell for Chameleon",
+  "author": "Piers Anthony"
+ },
+ {
+  "title": "The Magic School Bus",
+  "author": "Joanna Cole"
+ },
+ {
+  "title": "Towers of Midnight",
+  "author": "Robert Jordan, Brandon Sanderson"
+ },
+ {
+  "title": "Krondor",
+  "author": "Raymond E. Feist"
+ },
+ {
+  "title": "Honoured Enemy",
+  "author": "Raymond E. Feist, William Fortschen, William R. Forstchen"
+ },
+ {
+  "title": "Lioness Rampant",
+  "author": "Tamora Pierce"
+ },
+ {
+  "title": "Dogsbody",
+  "author": "Diana Wynne Jones"
+ },
+ {
+  "title": "A Breath of Snow and Ashes",
+  "author": "Diana Gabaldon, Diana Palmer, Davina Porter"
+ },
+ {
+  "title": "Animal Farm / Nineteen Eighty-Four",
+  "author": "George Orwell"
+ },
+ {
+  "title": "The mists of Avalon",
+  "author": "Marion Zimmer Bradley"
+ },
+ {
+  "title": "Many Waters (Time Quintet #4)",
+  "author": "Madeleine L'Engle"
+ },
+ {
+  "title": "Extract from Captain Stormfield's visit to heaven",
+  "author": "Mark Twain"
+ },
+ {
+  "title": "The Prydain Chronicles Book 4",
+  "author": "Lloyd Alexander"
+ },
+ {
+  "title": "Airborn",
+  "author": "Kenneth Oppel"
+ },
+ {
+  "title": "Deryni Checkmate",
+  "author": "Katherine Kurtz"
+ },
+ {
+  "title": "Norse Mythology",
+  "author": "Neil Gaiman, Anna Llisterri"
+ },
+ {
+  "title": "Throne of Glass",
+  "author": "Sarah J. Maas"
+ },
+ {
+  "title": "The Spiderwick Chronicles",
+  "author": "Tony DiTerlizzi, Holly Black"
+ },
+ {
+  "title": "Smoke and Mirrors",
+  "author": "Neil Gaiman, Richard Chizmar, William Peter Blatty, Kealan Patrick Burke, Brian Keene, Joe Hill, Joe R. Lansdale, Ray Garton"
+ },
+ {
+  "title": "The Black Unicorn",
+  "author": "Terry Brooks"
+ },
+ {
+  "title": "David and the Phoenix",
+  "author": "Edward Ormondroyd"
+ },
+ {
+  "title": "Diggers",
+  "author": "Terry Pratchett"
+ },
+ {
+  "title": "Merlín",
+  "author": "Stephen R. Lawhead"
+ },
+ {
+  "title": "The Angel and the Author",
+  "author": "Jerome Klapka Jerome"
+ },
+ {
+  "title": "The Skies of Pern",
+  "author": "Anne McCaffrey"
+ },
+ {
+  "title": "Czas pogardy",
+  "author": "Andrzej Sapkowski"
+ },
+ {
+  "title": "Mossflower (Redwall #2)",
+  "author": "Brian Jacques, Gary Chalk"
+ },
+ {
+  "title": "Flora & Ulysses",
+  "author": "Kate DiCamillo"
+ },
+ {
+  "title": "The Wishsong of Shannara",
+  "author": "Terry Brooks"
+ },
+ {
+  "title": "Midnight over Sanctaphrax",
+  "author": "Paul Stewart, Chris Riddell, STEWART, PAUL, RIDDELL, CHRIS"
+ },
+ {
+  "title": "Fire and Ice",
+  "author": "Erin Hunter, Dave Stevenson"
+ },
+ {
+  "title": "The Woman Who Rides Like a Man",
+  "author": "Tamora Pierce"
+ },
+ {
+  "title": "The Alloy of Law",
+  "author": "Brandon Sanderson"
+ },
+ {
+  "title": "Scary stories to tell in the dark",
+  "author": "Alvin Schwartz"
+ },
+ {
+  "title": "Something Rotten",
+  "author": "Jasper Fforde"
+ },
+ {
+  "title": "Ptolemy's Gate",
+  "author": "Jonathan Stroud"
+ },
+ {
+  "title": "Doll's House",
+  "author": "Rumer Godden, Jane Ray"
+ },
+ {
+  "title": "The Elfstones of Shannara",
+  "author": "Terry Brooks"
+ },
+ {
+  "title": "Petunia",
+  "author": "Roger Duvoisin"
+ },
+ {
+  "title": "Midnight for Charlie Bone",
+  "author": "Jenny Nimmo, Simon Russell Beale"
+ },
+ {
+  "title": "Sent i November",
+  "author": "Tove Jansson"
+ },
+ {
+  "title": "The Shepherd's Crown",
+  "author": "Terry Pratchett, Manuel Viciano Delibano, Paul Kidby, Laura Ellen Andersen"
+ },
+ {
+  "title": "The Witch of Prague",
+  "author": "Francis Marion Crawford"
+ },
+ {
+  "title": "The Dead Room",
+  "author": "Heather Graham"
+ },
+ {
+  "title": "Dragonseye",
+  "author": "Anne McCaffrey, Dick Hill"
+ },
+ {
+  "title": "Elidor",
+  "author": "Alan Garner"
+ },
+ {
+  "title": "A Dog So Small",
+  "author": "Philippa Pearce, Jenny Agutter"
+ },
+ {
+  "title": "Castle in the Air (Howl's Moving Castle #2)",
+  "author": "Diana Wynne Jones, Alex Nikolavitch"
+ },
+ {
+  "title": "A Grimm Warning",
+  "author": "Chris Colfer"
+ },
+ {
+  "title": "Heir of Fire",
+  "author": "Sarah J. Maas"
+ },
+ {
+  "title": "The Little Island",
+  "author": "Margaret Wise Brown"
+ },
+ {
+  "title": "Tuck Everlasting",
+  "author": "Natalie Babbitt"
+ },
+ {
+  "title": "Out From Boneville",
+  "author": "Jeff Smith, Jeff Smith"
+ },
+ {
+  "title": "A Dangerous Path",
+  "author": "Erin Hunter"
+ },
+ {
+  "title": "Gregor and the Code of Claw",
+  "author": "Suzanne Collins"
+ },
+ {
+  "title": "Naked empire",
+  "author": "Terry Goodkind"
+ },
+ {
+  "title": "A thin ghost and others",
+  "author": "Montague Rhodes James"
+ },
+ {
+  "title": "Five plays",
+  "author": "Lord Dunsany"
+ },
+ {
+  "title": "Keeper of the Lost Cities",
+  "author": "Shannon Messenger"
+ },
+ {
+  "title": "Wild Magic",
+  "author": "Tamora Pierce"
+ },
+ {
+  "title": "His Dark Materials",
+  "author": "Philip Pullman"
+ },
+ {
+  "title": "Roverandom",
+  "author": "J.R.R. Tolkien, Christina Scull, Wayne G. Hammond"
+ },
+ {
+  "title": "Bilbo's Last Song (At the Grey Havens)",
+  "author": "J.R.R. Tolkien"
+ },
+ {
+  "title": "Tea With the Black Dragon",
+  "author": "R. A. Macavoy"
+ },
+ {
+  "title": "Magyk (Septimus Heap)",
+  "author": "Angie Sage, angie sage, Angie SAGE, Angie Sage"
+ },
+ {
+  "title": "Sojourn",
+  "author": "R. A. Salvatore"
+ },
+ {
+  "title": "Taliesin (Pendragon Cycle #1)",
+  "author": "Stephen R. Lawhead"
+ },
+ {
+  "title": "The green millennium",
+  "author": "Fritz Leiber"
+ },
+ {
+  "title": "The moon of Gomrath",
+  "author": "Alan Garner"
+ },
+ {
+  "title": "Stormchaser",
+  "author": "Paul Stewart, Chris Riddell"
+ },
+ {
+  "title": "Definitely Dead (Southern Vampire Mysteries, Book 6)",
+  "author": "Charlaine Harris"
+ },
+ {
+  "title": "I was a rat!",
+  "author": "Philip Pullman"
+ },
+ {
+  "title": "The School for Good and Evil",
+  "author": "Soman Chainani, Blank, Michael"
+ },
+ {
+  "title": "The Thief of Always",
+  "author": "Clive Barker"
+ },
+ {
+  "title": "Loamhedge (Redwall #16)",
+  "author": "Brian Jacques"
+ },
+ {
+  "title": "Cart and Cwidder (The Dalemark Quartet)",
+  "author": "Diana Wynne Jones"
+ },
+ {
+  "title": "Forest of Secrets",
+  "author": "Erin Hunter, Dave Stevenson"
+ },
+ {
+  "title": "Harold and the Purple Crayon",
+  "author": "Crockett Johnson"
+ },
+ {
+  "title": "Tintentod",
+  "author": "Cornelia Funke"
+ },
+ {
+  "title": "City of Fallen Angels",
+  "author": "Cassandra Clare"
+ },
+ {
+  "title": "Ruin and Rising",
+  "author": "Leigh Bardugo"
+ },
+ {
+  "title": "Red Rising",
+  "author": "Pierce Brown"
+ },
+ {
+  "title": "Storm Front",
+  "author": "Jim Butcher"
+ },
+ {
+  "title": "Thanksgiving on Thursday",
+  "author": "Mary Pope Osborne, Sal Murdocca"
+ },
+ {
+  "title": "Nine Princes in Amber",
+  "author": "Roger Zelazny"
+ },
+ {
+  "title": "DERYNI RISING (Chronicles of the Deryni)",
+  "author": "Katherine Kurtz"
+ },
+ {
+  "title": "The centaur",
+  "author": "John Updike"
+ },
+ {
+  "title": "Three Hearts and Three Lions",
+  "author": "Poul Anderson"
+ },
+ {
+  "title": "War of the Twins",
+  "author": "Margaret Weis, Tracy Hickman"
+ },
+ {
+  "title": "The Spellcoats (Dalemark Quartet, Book 3)",
+  "author": "Diana Wynne Jones"
+ },
+ {
+  "title": "Raising Steam",
+  "author": "Terry Pratchett"
+ }
+]
