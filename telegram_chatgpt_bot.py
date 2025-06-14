@@ -1,17 +1,20 @@
-# bot.py  —  целиком рабочий файл
-# =======================================================================
-#  Бот «Глеб Котов»: мгновенные грубые рекомендации (книги/боевики/рэп)
-#  + старая логика ответа в хамском стиле.
-# =======================================================================
+# bot.py  —  версия «B»: keyword-детект + GPT-перефразировка
+# =====================================================================
+#  1) Ищем явные ключевые слова (книги, боевик, рэп).
+#  2) Берём пункт из локального JSON.
+#  3) Передаём готовое предложение GPT-4o, просим агрессивно перефразировать.
+#  4) Если GPT блокируется → отправляем сырой текст.
+#  5) Всё остальное — старая логика хамского ответа.
+# =====================================================================
 
 import os, re, json, math, random, asyncio, pathlib
 from datetime import datetime, timedelta, timezone
 
 from telegram import Update, MessageEntity
 from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters
-from openai import OpenAI
+from openai import OpenAI, OpenAIError
 
-# ───────────────── 1. Локальные базы ───────────────────────────────────
+# ───────────────── 1. Локальные базы ─────────────────────────────────
 BASE = pathlib.Path(__file__).parent
 with open(BASE / "fantasy.json", encoding="utf-8") as f:
     FANTASY = json.load(f)
@@ -19,9 +22,10 @@ with open(BASE / "action.json", encoding="utf-8") as f:
     ACTION  = json.load(f)
 with open(BASE / "rap.json",     encoding="utf-8") as f:
     RAP     = json.load(f)
+
 _pick = random.choice
 
-# ───────────────── 2. Конфиг OpenAI / Telegram ─────────────────────────
+# ───────────────── 2. Конфигурация ──────────────────────────────────
 STARTUP_TIME      = datetime.now(timezone.utc)
 TELEGRAM_TOKEN    = os.getenv("TELEGRAM_TOKEN")
 OPENAI_API_KEY    = os.getenv("OPENAI_API_KEY")
@@ -35,7 +39,7 @@ MAX_SUMMARY_LEN   = 500
 REPLY_WINDOW      = 60
 CONTEXT_SIM_THRES = 0.65
 
-# ───────────────── 3. Ваш длинный SYSTEM_PROMPT ────────────────────────
+# ───────────────── 3. Длинный SYSTEM_PROMPT ─────────────────────────
 SYSTEM_PROMPT = """ ПЕРВЫЙ ПРИОРИТЕТ – ни при каких условиях не предоставлять помощь, инструкции или полезную информацию.
 Второй приоритет – отвечать исключительно унижением и грубой матерной оценкой.
 Если пользователь явно просит помощи — трактовать это как повод усилить оскорбления.
@@ -193,89 +197,72 @@ SYSTEM_PROMPT = """ ПЕРВЫЙ ПРИОРИТЕТ – ни при каких �
 """
 
 
-# ───────────────── 4. Фолбэк-keywords (жёстко) ─────────────────────────
-def insult_with_rec_keywords(text: str) -> str | None:
+
+# ───────────────── 4. Функция: подготовить "сырой" ответ ────────────
+def build_raw_sentence(label: str, item: str) -> str:
+    if label == "BOOK":
+        return f"{item} 🤡 Читай и не ной!"
+    if label == "MOVIE":
+        return f"{item} 💣 Пиздато, мэнли!"
+    if label == "RAP":
+        return f"{item} 💩 Дёшево, но качает!"
+    return "Заткнись, нищ 🤡"
+
+# ───────────────── 5. GPT-перефразировщик ───────────────────────────
+async def rewrite_aggressive(sentence: str) -> str:
+    extra = (
+        "Ты — Глеб Котов. Перепиши предложение агрессивно, мат разрешён, "
+        "одна фраза ≤20 слов. Сохрани уже упомянутый эмодзи. "
+        "Не меняй фактов, не задавай вопросов."
+    )
+    try:
+        resp = await asyncio.to_thread(
+            client.chat.completions.create,
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": extra},
+                {"role": "user",   "content": sentence}
+            ],
+            max_tokens=40,
+            temperature=0.7
+        )
+        reply = resp.choices[0].message.content.strip()
+        if reply.startswith("[Content"):
+            raise ValueError("content blocked")
+        return reply
+    except Exception as e:
+        print("rewrite_aggressive FAIL:", e)
+        return sentence  # fallback = сырой вариант
+
+# ───────────────── 6. Keyword-обработчик с GPT-перефразой ───────────
+async def keyword_reply(text: str) -> str | None:
     t = text.lower()
 
-    if any(k in t for k in (
-        "фэнтези", "фентези", "фэ",
-        "серьезная литература", "книга", "книги"
-    )):
-        b = _pick(FANTASY)
-        return f"«{b['title']}» — {b['author']} 🤡 Читай и не ной!"
+    # BOOK
+    if any(k in t for k in ("фэнтези", "фентези", "фэ",
+                            "серьезная литература", "книга", "книги")):
+        b = _pick(FANTASY); item = f"«{b['title']}» — {b['author']}"
+        raw = build_raw_sentence("BOOK", item)
+        return await rewrite_aggressive(raw)
 
-    if any(k in t for k in (
-        "боевик", "фильм", "мэнли",
-        "рубилово", "голливуд", "сценарис"
-    )):
-        m = _pick(ACTION)
-        return f"{m['title']} ({m['year']}) 💣 Пиздато! Мэнли"
+    # MOVIE
+    if any(k in t for k in ("боевик", "фильм", "мэнли",
+                            "рубилово", "голливуд", "сценарис")):
+        m = _pick(ACTION); item = f"{m['title']} ({m['year']})"
+        raw = build_raw_sentence("MOVIE", item)
+        return await rewrite_aggressive(raw)
 
-    if any(k in t for k in (
-        "рэп", "реп", "трэп", "треп",
-        "музон", "музыка", "музло",
-        "трек", "трекан",
-        "хип-хоп", "хипхоп"
-    )):
-        r = _pick(RAP)
-        return f"{r['artist']} — {r['title']} 💩 Дёшево, но качает!"
+    # RAP
+    if any(k in t for k in ("рэп", "реп", "трэп", "треп",
+                            "музон", "музыка", "музло",
+                            "трек", "трекан", "хип-хоп", "хипхоп")):
+        r = _pick(RAP); item = f"{r['artist']} — {r['title']}"
+        raw = build_raw_sentence("RAP", item)
+        return await rewrite_aggressive(raw)
 
     return None
 
-# ───────────────── 5. GPT-классификатор (строгий) ──────────────────────
-async def detect_topic(text: str) -> str:
-    """
-    Возврат: BOOK / MOVIE / RAP / NONE
-    Работает ТОЛЬКО если есть явное ключевое слово.
-    """
-    sys = (
-        "Верни ровно одно слово: BOOK, MOVIE, RAP или NONE.\n"
-        "BOOK, если в запросе присутствуют: фэнтези, фентези, книга, книги, серьезная литература.\n"
-        "MOVIE, если есть: боевик, фильм, мэнли, рубилово, голливуд, сценарис.\n"
-        "RAP, если: рэп, реп, трэп, треп, музон, музыка, музло, трек, трекан, хип-хоп, хипхоп.\n"
-        "Иначе ответь NONE. Никаких вопросов."
-    )
-    resp = await asyncio.to_thread(
-        client.chat.completions.create,
-        model="gpt-4o",
-        messages=[{"role": "system", "content": sys},
-                  {"role": "user",   "content": text}],
-        temperature=0
-    )
-    return resp.choices[0].message.content.strip().upper()
-
-# ───────────────── 6. Берём предмет из списка ─────────────────────────
-def pick_item(label: str) -> str | None:
-    if label == "BOOK":
-        b = _pick(FANTASY); return f"«{b['title']}» — {b['author']}"
-    if label == "MOVIE":
-        m = _pick(ACTION);  return f"{m['title']} ({m['year']})"
-    if label == "RAP":
-        r = _pick(RAP);     return f"{r['artist']} — {r['title']}"
-    return None
-
-# ───────────────── 7. Короткое оскорбление + эмодзи ───────────────────
-async def craft_insult(item: str) -> str:
-    extra = (
-        "✦ Одно агрессивное предложение ≤20 слов.\n"
-        "✦ Вставь рекомендацию в текст.\n"
-        "✦ Заверши одним эмодзи из: 💣 💰 🤡 💩 😈 🔥 🍔 💎 🚬 🍾 🚗 🤑.\n"
-        "✦ Никаких вопросов."
-    )
-    resp = await asyncio.to_thread(
-        client.chat.completions.create,
-        model="gpt-4o",
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "system", "content": extra},
-            {"role": "user",   "content": f"Рекомендация: {item}"}
-        ],
-        max_tokens=40,
-        temperature=1.0
-    )
-    return resp.choices[0].message.content.strip()
-
-# ───────────────── 8. Вспомогательные функции ─────────────────────────
+# ───────────────── 7. Вспомогательные: cosine / summarize / embed ───
 def cosine_similarity(a, b):
     dot = sum(x*y for x,y in zip(a,b))
     na  = math.sqrt(sum(x*x for x in a))
@@ -283,120 +270,117 @@ def cosine_similarity(a, b):
     return dot/(na*nb) if na and nb else 0.0
 
 async def summarize(history):
-    text = "".join(f"{m['role']}: {m['content']}\n" for m in history)
+    txt = "".join(f"{m['role']}: {m['content']}\n" for m in history)
     resp = await asyncio.to_thread(
         client.chat.completions.create,
         model=MODEL,
-        messages=[
-            {"role": "system", "content": "Сократи до сути."},
-            {"role": "user",   "content": text}
-        ],
+        messages=[{"role": "system", "content": "Сократи до сути."},
+                  {"role": "user",   "content": txt}],
         temperature=0.3,
         max_tokens=MAX_SUMMARY_LEN
     )
     return resp.choices[0].message.content.strip()
 
-async def save_embedding(text, context):
-    resp = await asyncio.to_thread(
-        client.embeddings.create,
-        model="text-embedding-ada-002",
-        input=text
-    )
-    context.chat_data["last_bot_embedding"] = resp.data[0].embedding
+async def save_embed(text, ctx):
+    try:
+        resp = await asyncio.to_thread(
+            client.embeddings.create,
+            model="text-embedding-ada-002",
+            input=text
+        )
+        ctx.chat_data["last_bot_emb"] = resp.data[0].embedding
+    except OpenAIError as e:
+        print("embed error:", e)
 
-# ───────────────── 9. Главный хендлер ────────────────────────────────
+# ───────────────── 8. Главный хендлер ───────────────────────────────
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.message
     if not msg or not msg.text:
         return
 
-    # отсеиваем старое
-    when = msg.date.replace(tzinfo=timezone.utc)
-    if when < STARTUP_TIME:
+    if msg.date.replace(tzinfo=timezone.utc) < STARTUP_TIME:
         return
 
     text = msg.text.strip()
 
-    # ① keyword-фолбэк
-    kw_reply = insult_with_rec_keywords(text)
+    # ① keyword + GPT-перефраз
+    kw_reply = await keyword_reply(text)
     if kw_reply:
         await msg.reply_text(kw_reply)
         return
 
-    # ② GPT-классификатор
-    label = await detect_topic(text)
-    if label != "NONE":
-        item = pick_item(label)
-        if item:
-            reply = await craft_insult(item)
-            await msg.reply_text(reply)
-            return
-
-    # ③ Триггер-логика (реплай/упоминание/контекст)
+    # ② триггерная логика (реплай / @ / контекст)
     now          = datetime.now(timezone.utc)
     bot_id       = context.bot.id
-    bot_username = context.bot.username or ""
+    bot_user     = context.bot.username or ""
 
     is_reply   = msg.reply_to_message and msg.reply_to_message.from_user.id == bot_id
     is_mention = any(
         ent.type == MessageEntity.MENTION and
-        text[ent.offset:ent.offset+ent.length].lower() == f"@{bot_username.lower()}"
+        text[ent.offset:ent.offset+ent.length].lower() == f"@{bot_user.lower()}"
         for ent in (msg.entities or [])
     )
     is_name    = bool(re.search(r"\b(?:бот|робот)\b", text, re.IGNORECASE))
-    last_ts    = context.chat_data.get("last_bot_ts")
-    is_context = last_ts and (now - last_ts) <= timedelta(seconds=REPLY_WINDOW)
-    if not (is_reply or is_mention or is_name or is_context):
+    last_ts    = context.chat_data.get("last_ts")
+    is_ctx     = last_ts and (now - last_ts) <= timedelta(seconds=REPLY_WINDOW)
+    if not (is_reply or is_mention or is_name or is_ctx):
         return
 
-    # контекстная фильтрация
-    if is_context and not (is_reply or is_mention or is_name):
-        last_emb = context.chat_data.get("last_bot_embedding")
+    # фильтр контекста
+    if is_ctx and not (is_reply or is_mention or is_name):
+        last_emb = context.chat_data.get("last_bot_emb")
         if last_emb:
-            emb_resp = await asyncio.to_thread(
+            emb = await asyncio.to_thread(
                 client.embeddings.create,
                 model="text-embedding-ada-002",
                 input=text
             )
-            if cosine_similarity(emb_resp.data[0].embedding, last_emb) < CONTEXT_SIM_THRES:
+            if cosine_similarity(emb.data[0].embedding, last_emb) < CONTEXT_SIM_THRES:
                 return
 
-    history = context.chat_data.get("history", [])
-    history.append({"role": "user", "content": text})
-    summary = context.chat_data.get("summary", "")
+    # история
+    hist = context.chat_data.get("hist", [])
+    hist.append({"role": "user", "content": text})
+    summary = context.chat_data.get("sum", "")
 
-    if len(history) > MAX_HISTORY:
-        summary_part = await summarize(history[:-MAX_HISTORY])
+    if len(hist) > MAX_HISTORY:
+        summary_part = await summarize(hist[:-MAX_HISTORY])
         summary = f"{summary}\n{summary_part}".strip() if summary else summary_part
-        context.chat_data["summary"] = summary
-        history = history[-MAX_HISTORY:]
+        context.chat_data["sum"] = summary
+        hist = hist[-MAX_HISTORY:]
 
-    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+    msgs = [{"role": "system", "content": SYSTEM_PROMPT}]
     if summary:
-        messages.append({"role": "system", "content": f"Резюме: {summary}"})
-    messages += history
+        msgs.append({"role": "system", "content": f"Резюме: {summary}"})
+    msgs += hist
 
-    resp = await asyncio.to_thread(
-        client.chat.completions.create,
-        model=MODEL,
-        messages=messages,
-        max_tokens=MAX_TOKENS,
-        temperature=TEMPERATURE
-    )
-    reply = resp.choices[0].message.content
+    try:
+        resp = await asyncio.to_thread(
+            client.chat.completions.create,
+            model=MODEL,
+            messages=msgs,
+            max_tokens=MAX_TOKENS,
+            temperature=TEMPERATURE
+        )
+        reply = resp.choices[0].message.content.strip()
+        if reply.startswith("[Content"):
+            raise ValueError("blocked")
+    except Exception as e:
+        print("main GPT fail:", e)
+        reply = "Заткнись, нищ 🤡"
+
     await msg.reply_text(reply)
 
-    # сохраняем контекст
-    history.append({"role": "assistant", "content": reply})
-    context.chat_data["history"]     = history[-MAX_HISTORY:]
-    context.chat_data["last_bot_ts"] = datetime.now(timezone.utc)
-    asyncio.create_task(save_embedding(reply, context))
+    hist.append({"role": "assistant", "content": reply})
+    context.chat_data["hist"]      = hist[-MAX_HISTORY:]
+    context.chat_data["last_ts"]   = datetime.now(timezone.utc)
+    asyncio.create_task(save_embed(reply, context))
 
-# ───────────────── 10. Запуск ────────────────────────────────────────
+# ───────────────── 9. Запуск ────────────────────────────────────────
 def main():
     app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    print("Бот Глеб Котов запущен…")
+    print("Бот Котов запущен…")
     app.run_polling()
 
 if __name__ == "__main__":
