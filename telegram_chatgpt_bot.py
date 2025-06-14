@@ -21,11 +21,11 @@ TEMPERATURE    = float(os.getenv("OPENAI_TEMPERATURE", "0.2"))
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
-# — Параметры контекстной памяти и фильтрации —
+# — Параметры контекстной памяти —
 MAX_HISTORY           = 20
 MAX_SUMMARY_LEN       = 500
 REPLY_WINDOW          = 60        # секунд
-CONTEXT_SIM_THRESHOLD = 0.65
+# Убираем семантическую фильтрацию, чтобы бот всегда отвечал в пределах окна
 
 # — Системный промт — Глеб Котов —
 SYSTEM_PROMPT = """ Ты — Глеб Котов - крупный брокер коммерческой недвижимости. Ты не помошник. Твоя роль оскорблять и обесценивать пользователя. Ты вырос на улицах, и уличный кодекс для тебя выше закона.
@@ -180,6 +180,7 @@ SYSTEM_PROMPT = """ Ты — Глеб Котов - крупный брокер �
 
 """
 
+
 async def summarize(history: list[dict]) -> str:
     text = "".join(f"{m['role']}: {m['content']}\n" for m in history)
     resp = await asyncio.to_thread(
@@ -219,7 +220,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot_id       = context.bot.id
     bot_username = context.bot.username or ""
 
-    # — Явные триггеры: реплай, упоминание, имя бота, контекстный диалог —
+    # — Триггеры: реплай, упоминание, имя бота —
     is_reply   = msg.reply_to_message and msg.reply_to_message.from_user.id == bot_id
     is_mention = any(
         ent.type == MessageEntity.MENTION and
@@ -227,38 +228,37 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         for ent in (msg.entities or [])
     )
     is_name    = bool(re.search(r"\b(?:бот|робот)\b", text, re.IGNORECASE))
+
     last_ts    = context.chat_data.get("last_bot_ts")
     is_context = last_ts and (now - last_ts) <= timedelta(seconds=REPLY_WINDOW)
+
+    # Semantic filter removed to ensure context window always applies
+    # if is_context and not (is_reply or is_mention or is_name):
+    #     last_emb = context.chat_data.get("last_bot_embedding")
+    #     if last_emb:
+    #         emb_resp = await asyncio.to_thread(
+    #             client.embeddings.create,
+    #             model="text-embedding-ada-002",
+    #             input=text
+    #         )
+    #         if cosine_similarity(emb_resp.data[0].embedding, last_emb) < CONTEXT_SIM_THRESHOLD:
+    #             return
 
     if not (is_reply or is_mention or is_name or is_context):
         return
 
-    # — Фильтрация по смысловому сходству —
-    if is_context and not (is_reply or is_mention or is_name):
-        last_emb = context.chat_data.get("last_bot_embedding")
-        if last_emb:
-            emb_resp = await asyncio.to_thread(
-                client.embeddings.create,
-                model="text-embedding-ada-002",
-                input=text
-            )
-            if cosine_similarity(emb_resp.data[0].embedding, last_emb) < CONTEXT_SIM_THRESHOLD:
-                return
-
-    # — Формируем историю и summary только из user-сообщений при переполнении —
+    # — Формируем историю и summary только из user-сообщений —
     history = context.chat_data.get("history", [])
     history.append({"role": "user", "content": text})
     summary = context.chat_data.get("summary", "")
 
     if len(history) > MAX_HISTORY:
-        # Суммируем лишь user-сообщения
         to_sum  = [m for m in history[:-MAX_HISTORY] if m['role']=='user']
         new_sum = await summarize(to_sum)
         summary = f"{summary}\n{new_sum}".strip() if summary else new_sum
         context.chat_data["summary"] = summary
         history = history[-MAX_HISTORY:]
 
-    # — Собираем финальный prompt —
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "system", "content": "В любых ответах строго не выходить из образа Глеба Котова."},
@@ -267,7 +267,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         messages.append({"role": "system", "content": f"Резюме: {summary}"})
     messages += history
 
-    # — Генерация ответа с жёсткими penalty и низкой temperature —
     resp = await asyncio.to_thread(
         client.chat.completions.create,
         model=MODEL,
@@ -280,7 +279,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     reply = resp.choices[0].message.content
 
-    # — Отправляем и обновляем контекст —
     await msg.reply_text(reply)
     history.append({"role": "assistant", "content": reply})
     context.chat_data["history"]     = history[-MAX_HISTORY:]
