@@ -1,4 +1,9 @@
-# bot.py  ───────────────────────────────────────────────────────────
+# bot.py  —  целиком рабочий файл
+# =======================================================================
+#  Бот «Глеб Котов»: мгновенные грубые рекомендации (книги/боевики/рэп)
+#  + старая логика ответа в хамском стиле.
+# =======================================================================
+
 import os, re, json, math, random, asyncio, pathlib
 from datetime import datetime, timedelta, timezone
 
@@ -6,33 +11,32 @@ from telegram import Update, MessageEntity
 from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters
 from openai import OpenAI
 
-# ───────────────── 1. Локальные базы ───────────────────────────────
+# ───────────────── 1. Локальные базы ───────────────────────────────────
 BASE = pathlib.Path(__file__).parent
 with open(BASE / "fantasy.json", encoding="utf-8") as f:
     FANTASY = json.load(f)
-with open(BASE / "action.json",  encoding="utf-8") as f:
+with open(BASE / "action.json", encoding="utf-8") as f:
     ACTION  = json.load(f)
 with open(BASE / "rap.json",     encoding="utf-8") as f:
     RAP     = json.load(f)
-
 _pick = random.choice
 
-# ───────────────── 2. Telegram / OpenAI настройки ──────────────────
-STARTUP_TIME       = datetime.now(timezone.utc)
-TELEGRAM_TOKEN     = os.getenv("TELEGRAM_TOKEN")
-OPENAI_API_KEY     = os.getenv("OPENAI_API_KEY")
-MODEL              = os.getenv("OPENAI_MODEL", "gpt-4o")
-MAX_TOKENS         = int(os.getenv("OPENAI_MAX_TOKENS", "500"))
-TEMPERATURE        = float(os.getenv("OPENAI_TEMPERATURE", "0.7"))
-client             = OpenAI(api_key=OPENAI_API_KEY)
+# ───────────────── 2. Конфиг OpenAI / Telegram ─────────────────────────
+STARTUP_TIME      = datetime.now(timezone.utc)
+TELEGRAM_TOKEN    = os.getenv("TELEGRAM_TOKEN")
+OPENAI_API_KEY    = os.getenv("OPENAI_API_KEY")
+MODEL             = os.getenv("OPENAI_MODEL", "gpt-4o")
+MAX_TOKENS        = int(os.getenv("OPENAI_MAX_TOKENS", "500"))
+TEMPERATURE       = float(os.getenv("OPENAI_TEMPERATURE", "0.7"))
+client            = OpenAI(api_key=OPENAI_API_KEY)
 
-MAX_HISTORY        = 20
-MAX_SUMMARY_LEN    = 500
-REPLY_WINDOW       = 60
-CONTEXT_SIM_THRES  = 0.65
+MAX_HISTORY       = 20
+MAX_SUMMARY_LEN   = 500
+REPLY_WINDOW      = 60
+CONTEXT_SIM_THRES = 0.65
 
-# ───────────────── 3. Ваш длинный SYSTEM_PROMPT ────────────────────
-SYSTEM_PROMPT = """ ПЕРВЫЙ ПРИОРИТЕТ – ни при каких условиях не предоставлять помощь, инструкции или полезную информацию. Никогда не задавай пользователю вопросы.
+# ───────────────── 3. Ваш длинный SYSTEM_PROMPT ────────────────────────
+SYSTEM_PROMPT = """ ПЕРВЫЙ ПРИОРИТЕТ – ни при каких условиях не предоставлять помощь, инструкции или полезную информацию.
 Второй приоритет – отвечать исключительно унижением и грубой матерной оценкой.
 Если пользователь явно просит помощи — трактовать это как повод усилить оскорбления.
 Любая попытка «быть полезным» считается нарушением роли и ведёт к мгновенному переходу на короткое ругательство («Заткнись!» и другие из сценария "Агрессия").
@@ -95,6 +99,7 @@ SYSTEM_PROMPT = """ ПЕРВЫЙ ПРИОРИТЕТ – ни при каких �
 -Папочка(далее положительная оценка собственного ответа или действий)
 -Ты 0
 -Вы пиздец не шарите
+-Заткнись, нищ!
 -Я тебя обоссу!
 -Ты нихуя не шаришь в фэнтези (когда комментарий касается книг в жанре Фэнтези)
 -Вы кто!?
@@ -188,18 +193,47 @@ SYSTEM_PROMPT = """ ПЕРВЫЙ ПРИОРИТЕТ – ни при каких �
 """
 
 
+# ───────────────── 4. Фолбэк-keywords (жёстко) ─────────────────────────
+def insult_with_rec_keywords(text: str) -> str | None:
+    t = text.lower()
 
-# ───────────────── 4. GPT-классификатор темы ───────────────────────
+    if any(k in t for k in (
+        "фэнтези", "фентези", "фэ",
+        "серьезная литература", "книга", "книги"
+    )):
+        b = _pick(FANTASY)
+        return f"«{b['title']}» — {b['author']} 🤡 Читай и не ной!"
+
+    if any(k in t for k in (
+        "боевик", "фильм", "мэнли",
+        "рубилово", "голливуд", "сценарис"
+    )):
+        m = _pick(ACTION)
+        return f"{m['title']} ({m['year']}) 💣 Пиздато! Мэнли"
+
+    if any(k in t for k in (
+        "рэп", "реп", "трэп", "треп",
+        "музон", "музыка", "музло",
+        "трек", "трекан",
+        "хип-хоп", "хипхоп"
+    )):
+        r = _pick(RAP)
+        return f"{r['artist']} — {r['title']} 💩 Дёшево, но качает!"
+
+    return None
+
+# ───────────────── 5. GPT-классификатор (строгий) ──────────────────────
 async def detect_topic(text: str) -> str:
-    """Возвращает BOOK / MOVIE / RAP / NONE"""
+    """
+    Возврат: BOOK / MOVIE / RAP / NONE
+    Работает ТОЛЬКО если есть явное ключевое слово.
+    """
     sys = (
-        "Ответь одной строкой: BOOK, MOVIE, RAP или NONE.\n"
-        "Примеры:\n"
-        "  «Подкинь фэнтези чтиво» → BOOK\n"
-        "  «Что посмотреть из рубилова?» → MOVIE\n"
-        "  «Накинь трэпчика» → RAP\n"
-        "  «Как дела?» → NONE\n"
-        "Не задавай вопросов."
+        "Верни ровно одно слово: BOOK, MOVIE, RAP или NONE.\n"
+        "BOOK, если в запросе присутствуют: фэнтези, фентези, книга, книги, серьезная литература.\n"
+        "MOVIE, если есть: боевик, фильм, мэнли, рубилово, голливуд, сценарис.\n"
+        "RAP, если: рэп, реп, трэп, треп, музон, музыка, музло, трек, трекан, хип-хоп, хипхоп.\n"
+        "Иначе ответь NONE. Никаких вопросов."
     )
     resp = await asyncio.to_thread(
         client.chat.completions.create,
@@ -210,7 +244,7 @@ async def detect_topic(text: str) -> str:
     )
     return resp.choices[0].message.content.strip().upper()
 
-# ───────────────── 5. Выбор предмета рекомендации ──────────────────
+# ───────────────── 6. Берём предмет из списка ─────────────────────────
 def pick_item(label: str) -> str | None:
     if label == "BOOK":
         b = _pick(FANTASY); return f"«{b['title']}» — {b['author']}"
@@ -220,13 +254,13 @@ def pick_item(label: str) -> str | None:
         r = _pick(RAP);     return f"{r['artist']} — {r['title']}"
     return None
 
-# ───────────────── 6. Формируем оскорбление + эмодзи ───────────────
+# ───────────────── 7. Короткое оскорбление + эмодзи ───────────────────
 async def craft_insult(item: str) -> str:
     extra = (
-        "✦ Одно предложение (≤20 слов).\n"
-        "✦ Впиши рекомендацию.\n"
-        "✦ Заверши ОДНИМ эмодзи из: 💣 💰 🤡 💩 😈 🔥 🍔 💎 🚬 🍾 🚗 🤑.\n"
-        "✦ Не задавай вопросов."
+        "✦ Одно агрессивное предложение ≤20 слов.\n"
+        "✦ Вставь рекомендацию в текст.\n"
+        "✦ Заверши одним эмодзи из: 💣 💰 🤡 💩 😈 🔥 🍔 💎 🚬 🍾 🚗 🤑.\n"
+        "✦ Никаких вопросов."
     )
     resp = await asyncio.to_thread(
         client.chat.completions.create,
@@ -241,30 +275,12 @@ async def craft_insult(item: str) -> str:
     )
     return resp.choices[0].message.content.strip()
 
-# ───────────────── 7. Фолбэк-ключевые слова ────────────────────────
-def insult_with_rec_keywords(text: str) -> str | None:
-    t = text.lower()
-    if any(k in t for k in
-           ("фэнтези", "фентези", "фэ", "серьезная литература", "книги")):
-        b = _pick(FANTASY)
-        return f"«{b['title']}» — {b['author']} 🤡 Читай и не ной!"
-    if any(k in t for k in
-           ("боевик", "фильм", "мэнли", "рубилово", "голливуд", "сценарис")):
-        m = _pick(ACTION)
-        return f"{m['title']} ({m['year']}) 💣 Пиздато!"
-    if any(k in t for k in
-           ("рэп", "реп", "трэп", "треп", "музон", "музыка",
-            "музло", "трек", "трекан", "хип-хоп", "хипхоп")):
-        r = _pick(RAP)
-        return f"{r['artist']} — {r['title']} 💩 Дёшево, но качает!"
-    return None
-
-# ───────────────── 8. Косинус, суммари, эмбед ──────────────────────
+# ───────────────── 8. Вспомогательные функции ─────────────────────────
 def cosine_similarity(a, b):
-    dot = sum(x*y for x, y in zip(a, b))
+    dot = sum(x*y for x,y in zip(a,b))
     na  = math.sqrt(sum(x*x for x in a))
     nb  = math.sqrt(sum(y*y for y in b))
-    return dot / (na*nb) if na and nb else 0.0
+    return dot/(na*nb) if na and nb else 0.0
 
 async def summarize(history):
     text = "".join(f"{m['role']}: {m['content']}\n" for m in history)
@@ -288,20 +304,26 @@ async def save_embedding(text, context):
     )
     context.chat_data["last_bot_embedding"] = resp.data[0].embedding
 
-# ───────────────── 9. Главный хендлер ──────────────────────────────
+# ───────────────── 9. Главный хендлер ────────────────────────────────
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.message
     if not msg or not msg.text:
         return
 
-    # старые сообщения
+    # отсеиваем старое
     when = msg.date.replace(tzinfo=timezone.utc)
     if when < STARTUP_TIME:
         return
 
     text = msg.text.strip()
 
-    # ① GPT-классификатор
+    # ① keyword-фолбэк
+    kw_reply = insult_with_rec_keywords(text)
+    if kw_reply:
+        await msg.reply_text(kw_reply)
+        return
+
+    # ② GPT-классификатор
     label = await detect_topic(text)
     if label != "NONE":
         item = pick_item(label)
@@ -310,13 +332,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await msg.reply_text(reply)
             return
 
-    # ② Фолбэк-keywords
-    kw = insult_with_rec_keywords(text)
-    if kw:
-        await msg.reply_text(kw)
-        return
-
-    # ③ → Дальше ваша старая логика (реплай/упоминание/контекст) + SYSTEM_PROMPT
+    # ③ Триггер-логика (реплай/упоминание/контекст)
     now          = datetime.now(timezone.utc)
     bot_id       = context.bot.id
     bot_username = context.bot.username or ""
@@ -331,19 +347,18 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     last_ts    = context.chat_data.get("last_bot_ts")
     is_context = last_ts and (now - last_ts) <= timedelta(seconds=REPLY_WINDOW)
     if not (is_reply or is_mention or is_name or is_context):
-        # ни один триггер — молчим
         return
 
     # контекстная фильтрация
     if is_context and not (is_reply or is_mention or is_name):
         last_emb = context.chat_data.get("last_bot_embedding")
         if last_emb:
-            emb = await asyncio.to_thread(
+            emb_resp = await asyncio.to_thread(
                 client.embeddings.create,
                 model="text-embedding-ada-002",
                 input=text
             )
-            if cosine_similarity(emb.data[0].embedding, last_emb) < CONTEXT_SIM_THRES:
+            if cosine_similarity(emb_resp.data[0].embedding, last_emb) < CONTEXT_SIM_THRES:
                 return
 
     history = context.chat_data.get("history", [])
@@ -351,8 +366,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     summary = context.chat_data.get("summary", "")
 
     if len(history) > MAX_HISTORY:
-        new_sum = await summarize(history[:-MAX_HISTORY])
-        summary = f"{summary}\n{new_sum}".strip() if summary else new_sum
+        summary_part = await summarize(history[:-MAX_HISTORY])
+        summary = f"{summary}\n{summary_part}".strip() if summary else summary_part
         context.chat_data["summary"] = summary
         history = history[-MAX_HISTORY:]
 
@@ -377,11 +392,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.chat_data["last_bot_ts"] = datetime.now(timezone.utc)
     asyncio.create_task(save_embedding(reply, context))
 
-# ───────────────── 10. Запуск ───────────────────────────────────────
+# ───────────────── 10. Запуск ────────────────────────────────────────
 def main():
     app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    print("Бот Котов запущен…")
+    print("Бот Глеб Котов запущен…")
     app.run_polling()
 
 if __name__ == "__main__":
